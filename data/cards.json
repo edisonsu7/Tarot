@@ -1,0 +1,786 @@
+[
+  {
+    "id": "the_fool",
+    "nameCn": "愚人",
+    "nameEn": "The Fool",
+    "suit": "major",
+    "number": 0,
+    "keywords": ["开始", "自由", "勇气", "未知"],
+    "meaningUpright": "新的旅程正在开启。保持好奇与轻装上阵，给自己一个尝试的机会。",
+    "meaningReversed": "冲动与分心可能让你偏离方向。先确认底线与风险，再迈出下一步。"
+  },
+  {
+    "id": "the_magician",
+    "nameCn": "魔术师",
+    "nameEn": "The Magician",
+    "suit": "major",
+    "number": 1,
+    "keywords": ["行动", "资源", "专注", "创造"],
+    "meaningUpright": "你手上的资源足够用。把想法落地，专注于一件事就会看到成效。",
+    "meaningReversed": "可能出现拖延或自我怀疑。减少同时开启的任务，回到最关键的一步。"
+  },
+  {
+    "id": "the_high_priestess",
+    "nameCn": "女祭司",
+    "nameEn": "The High Priestess",
+    "suit": "major",
+    "number": 2,
+    "keywords": ["直觉", "沉静", "洞察", "秘密"],
+    "meaningUpright": "放慢一点，你会听见内心的答案。适合观察与收集信息，再做决定。",
+    "meaningReversed": "你可能忽略了直觉的提醒，或被情绪噪音干扰。给自己一点独处时间。"
+  },
+  {
+    "id": "the_empress",
+    "nameCn": "女皇",
+    "nameEn": "The Empress",
+    "suit": "major",
+    "number": 3,
+    "keywords": ["丰盛", "滋养", "关系", "成长"],
+    "meaningUpright": "今天适合照顾身体与关系，做“让自己更好”的投入，会得到回报。",
+    "meaningReversed": "过度付出或缺乏边界会让你疲惫。先把自己放回优先级。"
+  },
+  {
+    "id": "the_emperor",
+    "nameCn": "皇帝",
+    "nameEn": "The Emperor",
+    "suit": "major",
+    "number": 4,
+    "keywords": ["秩序", "规则", "掌控", "责任"],
+    "meaningUpright": "用结构化的方式推进事情：列清单、定规则、明确责任，会更顺利。",
+    "meaningReversed": "控制欲或僵化规则可能引发冲突。适度放权，给自己与他人空间。"
+  },
+  {
+    "id": "the_hierophant",
+    "nameCn": "教皇",
+    "nameEn": "The Hierophant",
+    "suit": "major",
+    "number": 5,
+    "keywords": ["传统", "学习", "导师", "承诺"],
+    "meaningUpright": "适合学习与请教。遵循成熟的方法论，会比“自己摸索”更省力。",
+    "meaningReversed": "旧的框架可能限制你。尝试提出不同做法，但保持尊重与事实依据。"
+  },
+  {
+    "id": "the_lovers",
+    "nameCn": "恋人",
+    "nameEn": "The Lovers",
+    "suit": "major",
+    "number": 6,
+    "keywords": ["选择", "关系", "一致", "价值观"],
+    "meaningUpright": "今天的关键在于“选择”。把价值观讲清楚，关系与合作会更顺畅。",
+    "meaningReversed": "犹豫或不一致会消耗能量。先确认你真正想要什么，再做承诺。"
+  },
+  {
+    "id": "the_chariot",
+    "nameCn": "战车",
+    "nameEn": "The Chariot",
+    "suit": "major",
+    "number": 7,
+    "keywords": ["推进", "胜利", "意志", "专注"],
+    "meaningUpright": "把注意力聚焦到目标上，执行力会带来进展。适合做“攻坚”的事。",
+    "meaningReversed": "方向不清或节奏过快会翻车。先校准目标，再加速。"
+  },
+  {
+    "id": "strength",
+    "nameCn": "力量",
+    "nameEn": "Strength",
+    "suit": "major",
+    "number": 8,
+    "keywords": ["耐心", "勇气", "温柔", "自律"],
+    "meaningUpright": "真正的强大来自温柔与自律。用耐心处理难题，会有意外的好结果。",
+    "meaningReversed": "过度压抑或突然爆发都不利。允许情绪流动，但别让它接管决定。"
+  },
+  {
+    "id": "the_hermit",
+    "nameCn": "隐者",
+    "nameEn": "The Hermit",
+    "suit": "major",
+    "number": 9,
+    "keywords": ["内省", "整理", "独处", "方向"],
+    "meaningUpright": "适合做减法：清理、复盘、独处思考。你的方向会更清晰。",
+    "meaningReversed": "你可能陷入过度思考。设一个截止时间，把思考落到一个行动上。"
+  },
+  {
+    "id": "wheel_of_fortune",
+    "nameCn": "命运之轮",
+    "nameEn": "Wheel of Fortune",
+    "suit": "major",
+    "number": 10,
+    "keywords": ["变化", "机遇", "周期", "转折"],
+    "meaningUpright": "变化正在发生，顺势而为会更轻松。留意偶然出现的机会与信息。",
+    "meaningReversed": "你可能感到卡住或运气不佳。先稳住节奏，做能控制的部分，等待周期过去。"
+  },
+  {
+    "id": "justice",
+    "nameCn": "正义",
+    "nameEn": "Justice",
+    "suit": "major",
+    "number": 11,
+    "keywords": ["平衡", "事实", "责任", "选择"],
+    "meaningUpright": "用事实与边界说话。今天适合做决定、谈规则、处理合同与承诺。",
+    "meaningReversed": "偏见或信息不全会导致失衡。先补齐事实，再评估自己的立场。"
+  },
+  {
+    "id": "the_hanged_man",
+    "nameCn": "倒吊人",
+    "nameEn": "The Hanged Man",
+    "suit": "major",
+    "number": 12,
+    "keywords": ["暂停", "换角度", "牺牲", "领悟"],
+    "meaningUpright": "先暂停一下，换个角度会看到新解法。今天不必强推，适合调整策略。",
+    "meaningReversed": "你可能被动拖延或陷入无效牺牲。明确目的：为何等待？等待换来什么？"
+  },
+  {
+    "id": "death",
+    "nameCn": "死神",
+    "nameEn": "Death",
+    "suit": "major",
+    "number": 13,
+    "keywords": ["结束", "重启", "断舍离", "转变"],
+    "meaningUpright": "旧的阶段正在结束。放下不再适合的东西，新的空间会自然出现。",
+    "meaningReversed": "对变化的抗拒会让你更累。尝试先做一个小小的告别动作，开始移动。"
+  },
+  {
+    "id": "temperance",
+    "nameCn": "节制",
+    "nameEn": "Temperance",
+    "suit": "major",
+    "number": 14,
+    "keywords": ["调和", "耐心", "节奏", "整合"],
+    "meaningUpright": "慢就是快。把不同资源整合起来，找到适合自己的节奏与配方。",
+    "meaningReversed": "极端与失衡会带来反噬。把生活与工作拉回可持续的状态。"
+  },
+  {
+    "id": "the_devil",
+    "nameCn": "恶魔",
+    "nameEn": "The Devil",
+    "suit": "major",
+    "number": 15,
+    "keywords": ["诱惑", "依赖", "束缚", "欲望"],
+    "meaningUpright": "留意让你上瘾或被控制的东西。看清代价，你就能重新做选择。",
+    "meaningReversed": "你正在从束缚中松开。今天适合设边界、戒掉一个坏习惯或结束一段消耗。"
+  },
+  {
+    "id": "the_tower",
+    "nameCn": "高塔",
+    "nameEn": "The Tower",
+    "suit": "major",
+    "number": 16,
+    "keywords": ["突变", "真相", "重建", "觉醒"],
+    "meaningUpright": "某些结构不再稳固，真相会加速改变。保持弹性，你能更快重建。",
+    "meaningReversed": "你可能在回避必要的改变。尝试先处理最关键的一块“松动的砖”。"
+  },
+  {
+    "id": "the_star",
+    "nameCn": "星星",
+    "nameEn": "The Star",
+    "suit": "major",
+    "number": 17,
+    "keywords": ["希望", "疗愈", "愿景", "平静"],
+    "meaningUpright": "把目光放到更长期的愿景上。今天适合疗愈、修复关系、恢复信心。",
+    "meaningReversed": "失望或怀疑可能遮住了光。先从小目标开始，给自己一点可验证的进步。"
+  },
+  {
+    "id": "the_moon",
+    "nameCn": "月亮",
+    "nameEn": "The Moon",
+    "suit": "major",
+    "number": 18,
+    "keywords": ["迷雾", "直觉", "不安", "潜意识"],
+    "meaningUpright": "信息可能不完整，别急着下结论。把梦与直觉当作线索，而不是证据。",
+    "meaningReversed": "迷雾正在散去。把担心写下来并逐条验证，你会更安心。"
+  },
+  {
+    "id": "the_sun",
+    "nameCn": "太阳",
+    "nameEn": "The Sun",
+    "suit": "major",
+    "number": 19,
+    "keywords": ["喜悦", "清晰", "成功", "能量"],
+    "meaningUpright": "好消息与清晰感出现。适合表达、展示、推进公开可见的成果。",
+    "meaningReversed": "能量有点下降或过度乐观。保持节奏，别把希望变成压力。"
+  },
+  {
+    "id": "judgement",
+    "nameCn": "审判",
+    "nameEn": "Judgement",
+    "suit": "major",
+    "number": 20,
+    "keywords": ["复苏", "召唤", "复盘", "决定"],
+    "meaningUpright": "一个阶段进入“结算与复苏”。听从内心的召唤，做出更对得起自己的决定。",
+    "meaningReversed": "你可能在自责或害怕被评价。把复盘用在成长上，而不是惩罚自己。"
+  },
+  {
+    "id": "the_world",
+    "nameCn": "世界",
+    "nameEn": "The World",
+    "suit": "major",
+    "number": 21,
+    "keywords": ["完成", "整合", "圆满", "新阶段"],
+    "meaningUpright": "阶段性成果达成，适合收尾与庆祝。整合经验，你会开启下一个更大的循环。",
+    "meaningReversed": "临门一脚可能卡住。列出“最后 10%”清单，逐项收尾即可。"
+  },
+  {
+    "id": "wands_ace",
+    "nameCn": "权杖王牌",
+    "nameEn": "Ace of Wands",
+    "suit": "wands",
+    "number": 1,
+    "keywords": ["火花", "行动", "开始", "热情"],
+    "meaningUpright": "灵感与冲劲正在出现。把想法先做成一个可执行的小步骤。",
+    "meaningReversed": "热情被拖延或分心稀释。先清理干扰，再重新点火。"
+  },
+  {
+    "id": "wands_2",
+    "nameCn": "权杖二",
+    "nameEn": "Two of Wands",
+    "suit": "wands",
+    "number": 2,
+    "keywords": ["规划", "视野", "选择", "迈出"],
+    "meaningUpright": "适合做规划与选方向。把目标写出来，并选一个先开始。",
+    "meaningReversed": "犹豫会拖慢进度。把选择缩小到两个方案，快速试错。"
+  },
+  {
+    "id": "wands_3",
+    "nameCn": "权杖三",
+    "nameEn": "Three of Wands",
+    "suit": "wands",
+    "number": 3,
+    "keywords": ["扩展", "等待回响", "合作", "出发"],
+    "meaningUpright": "行动已经开始，接下来是扩展与对外连接。留意反馈并微调。",
+    "meaningReversed": "节奏可能不稳或期待过高。回到基础动作，稳住推进。"
+  },
+  {
+    "id": "wands_4",
+    "nameCn": "权杖四",
+    "nameEn": "Four of Wands",
+    "suit": "wands",
+    "number": 4,
+    "keywords": ["庆祝", "稳定", "里程碑", "归属"],
+    "meaningUpright": "适合庆祝阶段性成果，也适合经营关系与团队氛围。",
+    "meaningReversed": "不稳定或内耗影响幸福感。先把规则与分工说清楚。"
+  },
+  {
+    "id": "wands_5",
+    "nameCn": "权杖五",
+    "nameEn": "Five of Wands",
+    "suit": "wands",
+    "number": 5,
+    "keywords": ["竞争", "摩擦", "磨合", "分歧"],
+    "meaningUpright": "摩擦是磨合的一部分。聚焦共同目标，别把讨论变成对抗。",
+    "meaningReversed": "你可能想避开冲突。试着先定议题与规则，再谈内容。"
+  },
+  {
+    "id": "wands_6",
+    "nameCn": "权杖六",
+    "nameEn": "Six of Wands",
+    "suit": "wands",
+    "number": 6,
+    "keywords": ["认可", "胜利", "曝光", "自信"],
+    "meaningUpright": "今天适合展示成果并争取认可。自信会带来更多机会。",
+    "meaningReversed": "别被外界评价牵着走。把注意力放回可控的过程。"
+  },
+  {
+    "id": "wands_7",
+    "nameCn": "权杖七",
+    "nameEn": "Seven of Wands",
+    "suit": "wands",
+    "number": 7,
+    "keywords": ["防守", "立场", "坚持", "压力"],
+    "meaningUpright": "你需要守住立场与边界。挑重点回应，其余让时间证明。",
+    "meaningReversed": "压力过大可能让你失守。把战线缩短，只守最关键的一点。"
+  },
+  {
+    "id": "wands_8",
+    "nameCn": "权杖八",
+    "nameEn": "Eight of Wands",
+    "suit": "wands",
+    "number": 8,
+    "keywords": ["加速", "消息", "推进", "效率"],
+    "meaningUpright": "事情会变快。抓住窗口期，快速沟通、快速行动。",
+    "meaningReversed": "信息混乱或节奏失控。先整理优先级，再继续加速。"
+  },
+  {
+    "id": "wands_9",
+    "nameCn": "权杖九",
+    "nameEn": "Nine of Wands",
+    "suit": "wands",
+    "number": 9,
+    "keywords": ["坚持", "恢复", "防备", "韧性"],
+    "meaningUpright": "快到终点了。保持韧性，同时给自己留出休息与复原。",
+    "meaningReversed": "疲惫可能让你过度防备。寻求支持，别独自硬扛。"
+  },
+  {
+    "id": "wands_10",
+    "nameCn": "权杖十",
+    "nameEn": "Ten of Wands",
+    "suit": "wands",
+    "number": 10,
+    "keywords": ["负担", "责任", "压迫", "收尾"],
+    "meaningUpright": "任务过多会压垮你。今天适合减负：分配、拒绝、收尾。",
+    "meaningReversed": "你开始看见哪些负担不必背。把“应该”换成“必要”。"
+  },
+  {
+    "id": "wands_page",
+    "nameCn": "权杖侍从",
+    "nameEn": "Page of Wands",
+    "suit": "wands",
+    "number": 11,
+    "keywords": ["好奇", "学习", "尝试", "灵感"],
+    "meaningUpright": "带着好奇去尝试。今天适合启动一个小实验或学习新技能。",
+    "meaningReversed": "三分钟热度容易半途而废。先承诺一个最小持续周期。"
+  },
+  {
+    "id": "wands_knight",
+    "nameCn": "权杖骑士",
+    "nameEn": "Knight of Wands",
+    "suit": "wands",
+    "number": 12,
+    "keywords": ["冲劲", "冒险", "行动", "热度"],
+    "meaningUpright": "行动力爆棚的一天。适合主动出击，但别忽视风险评估。",
+    "meaningReversed": "冲动可能带来反复。把激情落到一个清晰的计划上。"
+  },
+  {
+    "id": "wands_queen",
+    "nameCn": "权杖王后",
+    "nameEn": "Queen of Wands",
+    "suit": "wands",
+    "number": 13,
+    "keywords": ["魅力", "领导", "自信", "温暖"],
+    "meaningUpright": "你会更有号召力。适合带头推动、表达观点、照亮他人。",
+    "meaningReversed": "别把自信变成强势。温柔但坚定，会更有力量。"
+  },
+  {
+    "id": "wands_king",
+    "nameCn": "权杖国王",
+    "nameEn": "King of Wands",
+    "suit": "wands",
+    "number": 14,
+    "keywords": ["远见", "决断", "推进", "主导"],
+    "meaningUpright": "适合做决断与统筹。用远见定方向，用执行落地。",
+    "meaningReversed": "过度主导可能压制团队。给别人舞台，也给自己余地。"
+  },
+
+  {
+    "id": "cups_ace",
+    "nameCn": "圣杯王牌",
+    "nameEn": "Ace of Cups",
+    "suit": "cups",
+    "number": 1,
+    "keywords": ["情感", "疗愈", "新关系", "柔软"],
+    "meaningUpright": "情感能量在流动。适合表达爱意、修复关系、照顾内心。",
+    "meaningReversed": "你可能压抑感受。允许自己感受，但别被情绪牵走。"
+  },
+  {
+    "id": "cups_2",
+    "nameCn": "圣杯二",
+    "nameEn": "Two of Cups",
+    "suit": "cups",
+    "number": 2,
+    "keywords": ["互相", "连结", "合作", "和解"],
+    "meaningUpright": "适合建立互惠的连结。真诚沟通会带来靠近与理解。",
+    "meaningReversed": "关系可能失衡。先说清需求与底线，再谈投入。"
+  },
+  {
+    "id": "cups_3",
+    "nameCn": "圣杯三",
+    "nameEn": "Three of Cups",
+    "suit": "cups",
+    "number": 3,
+    "keywords": ["友情", "庆祝", "支持", "社交"],
+    "meaningUpright": "适合社交与庆祝。与支持你的人相聚，会获得能量。",
+    "meaningReversed": "社交消耗或圈子压力上升。把时间留给真正重要的人。"
+  },
+  {
+    "id": "cups_4",
+    "nameCn": "圣杯四",
+    "nameEn": "Four of Cups",
+    "suit": "cups",
+    "number": 4,
+    "keywords": ["倦怠", "忽略机会", "内收", "反思"],
+    "meaningUpright": "你可能有点倦怠。先承认疲惫，再看看眼前其实有哪些机会。",
+    "meaningReversed": "你开始重新打开自己。把注意力放到一个小小的美好上。"
+  },
+  {
+    "id": "cups_5",
+    "nameCn": "圣杯五",
+    "nameEn": "Five of Cups",
+    "suit": "cups",
+    "number": 5,
+    "keywords": ["失落", "遗憾", "放下", "修复"],
+    "meaningUpright": "允许自己难过，但别停在遗憾里。把注意力转向仍然拥有的部分。",
+    "meaningReversed": "你正在走出失落。今天适合修复与重新开始。"
+  },
+  {
+    "id": "cups_6",
+    "nameCn": "圣杯六",
+    "nameEn": "Six of Cups",
+    "suit": "cups",
+    "number": 6,
+    "keywords": ["回忆", "温柔", "初心", "重逢"],
+    "meaningUpright": "怀旧与温柔的一天。适合回到初心、联系老朋友或重拾旧爱好。",
+    "meaningReversed": "别被过去绑住。带着经验前进，而不是回到旧模式。"
+  },
+  {
+    "id": "cups_7",
+    "nameCn": "圣杯七",
+    "nameEn": "Seven of Cups",
+    "suit": "cups",
+    "number": 7,
+    "keywords": ["幻想", "选择过多", "诱惑", "迷惘"],
+    "meaningUpright": "选择很多，但不必全要。挑一个最符合价值观的方向先试。",
+    "meaningReversed": "迷雾在散去。把愿望落地成可执行清单，会更清晰。"
+  },
+  {
+    "id": "cups_8",
+    "nameCn": "圣杯八",
+    "nameEn": "Eight of Cups",
+    "suit": "cups",
+    "number": 8,
+    "keywords": ["离开", "成长", "寻找意义", "转身"],
+    "meaningUpright": "某些东西不再满足你。离开不是否定，而是为成长腾出空间。",
+    "meaningReversed": "你可能舍不得放下。先做一个小小的告别动作，慢慢走。"
+  },
+  {
+    "id": "cups_9",
+    "nameCn": "圣杯九",
+    "nameEn": "Nine of Cups",
+    "suit": "cups",
+    "number": 9,
+    "keywords": ["满足", "享受", "愿望", "奖励"],
+    "meaningUpright": "满足感上升。适合奖励自己，也适合表达感恩与欣赏。",
+    "meaningReversed": "过度放纵或虚荣会空。把快乐回归到真实的需要上。"
+  },
+  {
+    "id": "cups_10",
+    "nameCn": "圣杯十",
+    "nameEn": "Ten of Cups",
+    "suit": "cups",
+    "number": 10,
+    "keywords": ["幸福", "家庭", "圆满", "和谐"],
+    "meaningUpright": "适合经营家庭与亲密关系。把爱说出来，也把关心做出来。",
+    "meaningReversed": "表面和谐下可能有没说出口的需求。温和沟通会更靠近。"
+  },
+  {
+    "id": "cups_page",
+    "nameCn": "圣杯侍从",
+    "nameEn": "Page of Cups",
+    "suit": "cups",
+    "number": 11,
+    "keywords": ["消息", "告白", "灵感", "柔软"],
+    "meaningUpright": "温柔的新讯号出现。适合表达心意、写作创作、倾听直觉。",
+    "meaningReversed": "敏感或逃避会造成误会。把感受说清楚，比猜测更好。"
+  },
+  {
+    "id": "cups_knight",
+    "nameCn": "圣杯骑士",
+    "nameEn": "Knight of Cups",
+    "suit": "cups",
+    "number": 12,
+    "keywords": ["浪漫", "邀请", "表达", "追求"],
+    "meaningUpright": "适合主动表达与邀请。用真诚，而不是套路，建立连结。",
+    "meaningReversed": "理想化可能带来落差。先看行动是否匹配承诺。"
+  },
+  {
+    "id": "cups_queen",
+    "nameCn": "圣杯王后",
+    "nameEn": "Queen of Cups",
+    "suit": "cups",
+    "number": 13,
+    "keywords": ["共情", "疗愈", "照顾", "直觉"],
+    "meaningUpright": "适合照顾自己与他人。共情是礼物，但别忘了边界。",
+    "meaningReversed": "情绪容易溢出。先稳定自己，再处理别人的需求。"
+  },
+  {
+    "id": "cups_king",
+    "nameCn": "圣杯国王",
+    "nameEn": "King of Cups",
+    "suit": "cups",
+    "number": 14,
+    "keywords": ["稳重", "情绪管理", "包容", "成熟"],
+    "meaningUpright": "用成熟稳重的方式处理情绪与关系。温和但坚定，最有效。",
+    "meaningReversed": "情绪压抑或失控都不利。先承认感受，再做决定。"
+  },
+
+  {
+    "id": "swords_ace",
+    "nameCn": "宝剑王牌",
+    "nameEn": "Ace of Swords",
+    "suit": "swords",
+    "number": 1,
+    "keywords": ["清晰", "真相", "决断", "沟通"],
+    "meaningUpright": "清晰与突破出现。适合做决定、写方案、把话讲明白。",
+    "meaningReversed": "信息不完整或沟通偏激。先确认事实，再表达。"
+  },
+  {
+    "id": "swords_2",
+    "nameCn": "宝剑二",
+    "nameEn": "Two of Swords",
+    "suit": "swords",
+    "number": 2,
+    "keywords": ["僵持", "回避", "选择", "平衡"],
+    "meaningUpright": "你在两难之间。把利弊写下来，会更容易做决定。",
+    "meaningReversed": "回避已经到头。今天适合面对问题、打开对话。"
+  },
+  {
+    "id": "swords_3",
+    "nameCn": "宝剑三",
+    "nameEn": "Three of Swords",
+    "suit": "swords",
+    "number": 3,
+    "keywords": ["心痛", "真相刺痛", "分离", "疗愈"],
+    "meaningUpright": "真相可能刺痛，但也能带来解脱。把注意力放在疗愈与修复上。",
+    "meaningReversed": "你正在修复伤口。别急着逞强，给自己时间。"
+  },
+  {
+    "id": "swords_4",
+    "nameCn": "宝剑四",
+    "nameEn": "Four of Swords",
+    "suit": "swords",
+    "number": 4,
+    "keywords": ["休息", "恢复", "暂停", "充电"],
+    "meaningUpright": "需要休息与恢复。今天适合做减法，给大脑一点空间。",
+    "meaningReversed": "焦虑让你停不下来。试着用睡眠与规律把节奏拉回。"
+  },
+  {
+    "id": "swords_5",
+    "nameCn": "宝剑五",
+    "nameEn": "Five of Swords",
+    "suit": "swords",
+    "number": 5,
+    "keywords": ["争执", "胜负心", "代价", "边界"],
+    "meaningUpright": "争胜可能带来代价。今天适合选择“值得赢”的战斗。",
+    "meaningReversed": "你开始放下胜负。把关系与长期利益放在前面。"
+  },
+  {
+    "id": "swords_6",
+    "nameCn": "宝剑六",
+    "nameEn": "Six of Swords",
+    "suit": "swords",
+    "number": 6,
+    "keywords": ["过渡", "离开困境", "修复", "前行"],
+    "meaningUpright": "从困难中过渡出来。一步一步往前走，你会更轻松。",
+    "meaningReversed": "你可能还被旧问题拉扯。先处理未完成的沟通与收尾。"
+  },
+  {
+    "id": "swords_7",
+    "nameCn": "宝剑七",
+    "nameEn": "Seven of Swords",
+    "suit": "swords",
+    "number": 7,
+    "keywords": ["策略", "隐瞒", "取巧", "谨慎"],
+    "meaningUpright": "需要策略与谨慎。别把信息一次性摊开，先把关键点守住。",
+    "meaningReversed": "隐藏的事可能浮出水面。坦诚与补救比继续遮掩更好。"
+  },
+  {
+    "id": "swords_8",
+    "nameCn": "宝剑八",
+    "nameEn": "Eight of Swords",
+    "suit": "swords",
+    "number": 8,
+    "keywords": ["束缚", "自我限制", "恐惧", "突破"],
+    "meaningUpright": "你可能觉得被困住，但往往是自我限制。找一个小出口先动起来。",
+    "meaningReversed": "束缚在松动。继续拆解恐惧，你会获得自由。"
+  },
+  {
+    "id": "swords_9",
+    "nameCn": "宝剑九",
+    "nameEn": "Nine of Swords",
+    "suit": "swords",
+    "number": 9,
+    "keywords": ["焦虑", "失眠", "担忧", "放松"],
+    "meaningUpright": "担忧放大了问题。把焦虑写下来，逐条验证与处理。",
+    "meaningReversed": "你开始从焦虑中出来。保持规律与支持系统，会更稳定。"
+  },
+  {
+    "id": "swords_10",
+    "nameCn": "宝剑十",
+    "nameEn": "Ten of Swords",
+    "suit": "swords",
+    "number": 10,
+    "keywords": ["结束", "触底", "重启", "放下"],
+    "meaningUpright": "一个阶段走到尽头。虽然刺痛，但也是重启的入口。",
+    "meaningReversed": "恢复开始发生。先做收尾与止损，再谈新计划。"
+  },
+  {
+    "id": "swords_page",
+    "nameCn": "宝剑侍从",
+    "nameEn": "Page of Swords",
+    "suit": "swords",
+    "number": 11,
+    "keywords": ["学习", "观察", "沟通", "求真"],
+    "meaningUpright": "适合学习与求真。多问一句、多查一份资料，会避免误判。",
+    "meaningReversed": "口舌是非或误读信息。别急着站队，先核实。"
+  },
+  {
+    "id": "swords_knight",
+    "nameCn": "宝剑骑士",
+    "nameEn": "Knight of Swords",
+    "suit": "swords",
+    "number": 12,
+    "keywords": ["果断", "冲刺", "直言", "速度"],
+    "meaningUpright": "适合快速推进与直言沟通。注意语气，别让速度伤到人。",
+    "meaningReversed": "鲁莽或过度尖锐会引发反弹。先听完，再反击。"
+  },
+  {
+    "id": "swords_queen",
+    "nameCn": "宝剑王后",
+    "nameEn": "Queen of Swords",
+    "suit": "swords",
+    "number": 13,
+    "keywords": ["边界", "清晰", "独立", "理性"],
+    "meaningUpright": "用理性与边界处理问题。今天适合做筛选、做决定、做取舍。",
+    "meaningReversed": "过度冷硬会伤人。把事实讲清楚的同时，也照顾情绪。"
+  },
+  {
+    "id": "swords_king",
+    "nameCn": "宝剑国王",
+    "nameEn": "King of Swords",
+    "suit": "swords",
+    "number": 14,
+    "keywords": ["规则", "判断", "权威", "决策"],
+    "meaningUpright": "适合用规则与标准做决策。把原则写下来，执行就会更稳。",
+    "meaningReversed": "权威压迫或偏见会带来反噬。保持开放与可验证的依据。"
+  },
+
+  {
+    "id": "pentacles_ace",
+    "nameCn": "星币王牌",
+    "nameEn": "Ace of Pentacles",
+    "suit": "pentacles",
+    "number": 1,
+    "keywords": ["机会", "落地", "资源", "开始"],
+    "meaningUpright": "新的现实机会出现。适合存钱、投资学习、把计划落到行动。",
+    "meaningReversed": "机会被忽略或准备不足。先补齐资源与能力，再出手。"
+  },
+  {
+    "id": "pentacles_2",
+    "nameCn": "星币二",
+    "nameEn": "Two of Pentacles",
+    "suit": "pentacles",
+    "number": 2,
+    "keywords": ["平衡", "多任务", "弹性", "安排"],
+    "meaningUpright": "需要平衡多件事。用清单与时间块管理，会更从容。",
+    "meaningReversed": "超载风险上升。砍掉一个任务，才能保住整体节奏。"
+  },
+  {
+    "id": "pentacles_3",
+    "nameCn": "星币三",
+    "nameEn": "Three of Pentacles",
+    "suit": "pentacles",
+    "number": 3,
+    "keywords": ["合作", "专业", "打磨", "团队"],
+    "meaningUpright": "适合协作与打磨细节。把标准对齐，成果会更专业。",
+    "meaningReversed": "沟通不顺或标准不一。先对齐“怎么评判好坏”。"
+  },
+  {
+    "id": "pentacles_4",
+    "nameCn": "星币四",
+    "nameEn": "Four of Pentacles",
+    "suit": "pentacles",
+    "number": 4,
+    "keywords": ["保守", "守住资源", "安全感", "掌控"],
+    "meaningUpright": "你在守住资源与安全感。适合做预算与风险控制。",
+    "meaningReversed": "过度紧抓会让你焦虑。给自己留一点弹性空间。"
+  },
+  {
+    "id": "pentacles_5",
+    "nameCn": "星币五",
+    "nameEn": "Five of Pentacles",
+    "suit": "pentacles",
+    "number": 5,
+    "keywords": ["匮乏感", "求助", "困难", "支持"],
+    "meaningUpright": "匮乏感可能放大压力。今天适合求助、找资源、寻求支持。",
+    "meaningReversed": "你正在走出困境。把小进步累计起来，会更有希望。"
+  },
+  {
+    "id": "pentacles_6",
+    "nameCn": "星币六",
+    "nameEn": "Six of Pentacles",
+    "suit": "pentacles",
+    "number": 6,
+    "keywords": ["给予", "回报", "公平", "互惠"],
+    "meaningUpright": "适合谈互惠与回报。无论是金钱还是时间，都需要更公平的分配。",
+    "meaningReversed": "施与受失衡。别用亏欠绑住关系，也别靠控制换安全感。"
+  },
+  {
+    "id": "pentacles_7",
+    "nameCn": "星币七",
+    "nameEn": "Seven of Pentacles",
+    "suit": "pentacles",
+    "number": 7,
+    "keywords": ["耐心", "等待成果", "复盘", "长期"],
+    "meaningUpright": "长期投入需要耐心。今天适合复盘并微调策略，继续坚持。",
+    "meaningReversed": "急躁会让你想放弃。回头看看已完成的部分，再决定下一步。"
+  },
+  {
+    "id": "pentacles_8",
+    "nameCn": "星币八",
+    "nameEn": "Eight of Pentacles",
+    "suit": "pentacles",
+    "number": 8,
+    "keywords": ["练习", "打磨", "专注", "技能"],
+    "meaningUpright": "适合练习与精进。把时间投入到技能与工艺，回报会很实在。",
+    "meaningReversed": "分心或敷衍会拉低质量。今天只做一件事，但把它做好。"
+  },
+  {
+    "id": "pentacles_9",
+    "nameCn": "星币九",
+    "nameEn": "Nine of Pentacles",
+    "suit": "pentacles",
+    "number": 9,
+    "keywords": ["独立", "成果", "享受", "稳固"],
+    "meaningUpright": "成果与独立感增强。适合享受自己的努力成果，也适合建立更稳的系统。",
+    "meaningReversed": "别把价值绑在成果上。留一点时间给生活本身。"
+  },
+  {
+    "id": "pentacles_10",
+    "nameCn": "星币十",
+    "nameEn": "Ten of Pentacles",
+    "suit": "pentacles",
+    "number": 10,
+    "keywords": ["长期稳定", "家族", "资产", "传承"],
+    "meaningUpright": "适合做长期规划：家庭、资产、稳定结构。把基础打牢。",
+    "meaningReversed": "表面的稳定下可能有隐患。把规则与边界重新谈清楚。"
+  },
+  {
+    "id": "pentacles_page",
+    "nameCn": "星币侍从",
+    "nameEn": "Page of Pentacles",
+    "suit": "pentacles",
+    "number": 11,
+    "keywords": ["学习", "新机会", "务实", "开始"],
+    "meaningUpright": "务实的新机会出现。适合学习、投递、开启一个可落地的计划。",
+    "meaningReversed": "拖延或轻视细节会错失机会。把第一步做完就会顺。"
+  },
+  {
+    "id": "pentacles_knight",
+    "nameCn": "星币骑士",
+    "nameEn": "Knight of Pentacles",
+    "suit": "pentacles",
+    "number": 12,
+    "keywords": ["稳定", "执行", "耐心", "踏实"],
+    "meaningUpright": "今天适合稳扎稳打地执行。慢一点，但持续，就会赢。",
+    "meaningReversed": "固执或拖延会让你停滞。做一次小调整，恢复流动。"
+  },
+  {
+    "id": "pentacles_queen",
+    "nameCn": "星币王后",
+    "nameEn": "Queen of Pentacles",
+    "suit": "pentacles",
+    "number": 13,
+    "keywords": ["照顾", "丰盛", "稳定", "资源管理"],
+    "meaningUpright": "适合照顾身体与生活系统。把资源安排好，你会更安心。",
+    "meaningReversed": "过度操劳会消耗你。先照顾自己，才有余力照顾别人。"
+  },
+  {
+    "id": "pentacles_king",
+    "nameCn": "星币国王",
+    "nameEn": "King of Pentacles",
+    "suit": "pentacles",
+    "number": 14,
+    "keywords": ["掌控资源", "稳健", "成果", "责任"],
+    "meaningUpright": "适合做资源与金钱相关的决策：稳健、长期、可持续。",
+    "meaningReversed": "别用金钱或控制换安全感。把价值与关系分开看。"
+  }
+]
+
