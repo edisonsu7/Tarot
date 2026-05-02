@@ -75,7 +75,7 @@
 | Phase 2.5 | 抽牌页卡牌尺寸 + 翻牌动画（5 阶段状态机 + 3D flip + 覆盖层） | ✅ 完成 |
 | Phase 2.6 | 抽牌界面牌尺寸放大；灵感问牌问题输入影响结果（标题/说明文字区分） | ✅ 完成 |
 | Phase 2.8 | 接入 OpenAI API，灵感问牌有问题时生成针对性解读 | ✅ 完成 |
-| Phase 2.9 | 每日一抽文案去重复；导航栏圆角修复；移动端回归 | ✅ 完成 |
+| Phase 2.9 | MVP 上线前整体验收：首页轻量化、`/ask` 与 draw/result 风格对齐、双流程 7 张扇形抽牌、结果底栏与分享卡、AppShell 统一 footer；详见下文「MVP 上线」 | ✅ 完成 |
 | Phase 2.9.6 | 分享卡片功能：替换复制按钮，新增 html-to-image 生成图片，v2 按钮层级 | ✅ 完成 |
 | Phase 2.9.7 | 统一结果页底部操作：仅保留分享为主按钮，其余改为文字链接 | ✅ 完成 |
 | Phase 2.9.8 | 抽取 `ResultActions` 共用组件，每日抽牌与灵感问牌结果页底部操作完全共享 | ✅ 完成 |
@@ -94,9 +94,25 @@
 | `components/AppShell.tsx` | 全站 shell，Client 组件，usePathname 控制 SiteFooter 显示（抽牌页不显示） |
 | `components/SiteFooter.tsx` | 统一底部：隐私与数据 · © 2026 牌语 Tarot |
 | `components/ResultActions.tsx` | 结果页底部操作区（分享按钮 + 了解这张牌/再试/返回首页 文字链接），两个结果页共用 |
-| `components/ShareCard.tsx` | 600×800 离屏卡片 DOM，用于 html-to-image 截图 |
+| `components/ShareCard.tsx` | 286×381 离屏分享卡 DOM + 二维码，用于 html-to-image 截图 |
 | `components/ShareCardButton.tsx` | 生成 PNG → navigator.share → 下载 → 剪贴板文字 fallback |
 | `components/DailyDrawPick.tsx` | 每日一抽 7 张牌扇形抽牌，与 AskDrawPick 使用相同 CSS |
+
+---
+
+## MVP 上线（当前稳定版）
+
+**状态：已准备正式上线（`release: launch tarot mvp`）。**
+
+- **Phase 2.9 已完成**：作为上线前整体验收阶段关闭。
+- **首页已轻量化**：入口与视觉收敛，便于直达每日一抽 / 灵感问牌。
+- **`/ask` 写问题页已对齐 draw/result 风格**：与抽牌、结果页同一套站点气质与结构。
+- **每日抽牌与灵感问牌抽牌页统一为 7 张牌扇形抽牌**：`DailyDrawPick` / `AskDrawPick` 共用同一套交互与样式基础。
+- **结果页底部操作区已统一**：`ResultActions` 共用，分享为主、其余为文字链接。
+- **Footer 已由 `AppShell` 统一控制**：抽牌全屏页等场景按需隐藏，避免错位。
+- **分享卡片已修复并加入二维码**：`ShareCard` + `ShareCardButton`，扫码落地与线上站点一致；生成流程与数据结构未改。
+- **OpenAI API 逻辑保持不变**：仍仅 `app/api/reading/route.ts` server-side，`OPENAI_API_KEY` 仅环境变量。
+- **下一阶段：Phase 3.0 — 内容质量升级**（牌义深度、文案与体验迭代等，待定 scope）。
 
 ---
 
@@ -107,8 +123,10 @@
 
 ---
 
-## 下一步方向（Phase 3 待定）
+## 下一步方向（Phase 3.0）
 
-可选方向：SEO 优化 / 牌库页面 / 历史记录 / 更多牌阵
+**主题：内容质量升级**（与 MVP 功能冻结后的迭代）。
 
-*最后更新：Phase 2.9.13 完成*
+可选方向仍包括：SEO、牌库页、历史记录、更多牌阵等 — 在 Phase 3.0 中按优先级取舍。
+
+*最后更新：MVP 上线（Phase 2.9 关闭，Phase 3.0 待启）*
