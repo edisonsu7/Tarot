@@ -69,33 +69,16 @@ export function sanitizeMeaningFromParam(raw: string | undefined | null): string
 
 export function resolveMeaningBack(fromRaw: string | undefined | null, cardId: string): { href: string; label: string } {
   const p = sanitizeMeaningFromParam(fromRaw);
-  if (!p) return { href: `/cards/${cardId}`, label: "返回牌面" };
+  if (!p) return { href: "/daily/result", label: "返回今日结果" };
   if (p === "/") return { href: "/", label: "返回首页" };
 
-  const segs = p.split("/").filter(Boolean);
-  if (segs[0] === "cards") {
-    if (segs.length === 1) return { href: "/cards", label: "返回牌库" };
-    const cid = segs[1];
-    if (!cid) return { href: "/cards", label: "返回牌库" };
-    if (segs[2] === "meaning") return { href: `/cards/${cid}`, label: "返回牌面" };
-    return { href: `/cards/${cid}`, label: "返回牌面" };
-  }
-
   if (p.startsWith("/daily/result")) return { href: "/daily/result", label: "返回今日结果" };
-  if (p.startsWith("/daily/pick")) return { href: "/daily/pick", label: "返回今日指引" };
-  if (p === "/daily" || p.startsWith("/daily?")) return { href: "/daily", label: "返回今日指引" };
-
-  // 灵感问牌：完整牌义返回应回到“结果态”，而非重新回选牌流程
-  if (p.startsWith("/draw/pick")) return { href: "/draw/pick?result=1", label: "返回结果" };
-  if (p === "/draw" || p.startsWith("/draw?")) return { href: "/draw", label: "返回灵感问牌" };
-
-  if (p.startsWith("/history")) return { href: "/history", label: "返回历史记录" };
-  if (p.startsWith("/favs")) return { href: "/favs", label: "返回收藏" };
-  if (p.startsWith("/my")) return { href: "/my", label: "返回我的" };
+  if (p.startsWith("/daily")) return { href: "/daily", label: "返回今日指引" };
+  if (p.startsWith("/ask/result")) return { href: "/ask/result", label: "返回问牌结果" };
+  if (p.startsWith("/ask")) return { href: "/ask", label: "返回问牌" };
   if (p.startsWith("/about")) return { href: p.split("#")[0] || "/about", label: "返回说明" };
-  if (p.startsWith("/day/")) return { href: p, label: "返回该日记录" };
 
-  return { href: p, label: "返回" };
+  return { href: "/daily/result", label: "返回今日结果" };
 }
 
 export function cardMeaningPagePath(cardId: string, isReversed: boolean, opts?: { from?: string }): string {

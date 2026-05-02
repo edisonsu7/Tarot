@@ -1,38 +1,47 @@
 "use client";
 
 import Link from "next/link";
+import { useEffect, useState } from "react";
+import { getDateKeyInTimeZone } from "@/lib/dateKey";
+import { getDrawForDate } from "@/lib/drawStorage";
 
-/** 首页：奶油双卡片风，样式见 `app/globals.css`（与全站 theme-cream 一致）。 */
 export function HomeLanding() {
+  const [hasDailyToday, setHasDailyToday] = useState(false);
+
+  useEffect(() => {
+    try {
+      const today = getDateKeyInTimeZone(new Date(), "Asia/Shanghai");
+      const record = getDrawForDate(today);
+      setHasDailyToday(!!record);
+    } catch {}
+  }, []);
+
   return (
     <div className="w-full">
       <div className="home-cream-panel">
         <header className="home-cream-head text-center" style={{ paddingTop: 4 }}>
-          <p className="home-cream-lead">今天想要一个提醒，还是想问一个答案？</p>
+          <p className="home-cream-lead">今天，你想知道什么？</p>
         </header>
 
         <div className="home-cream-dual">
           <Link href="/daily" className="home-cream-card home-cream-card--tilt-l">
-            <span className="home-cream-deco" aria-hidden="true">
-              ☀
-            </span>
             <h2>今日指引</h2>
-            <p>每天一张牌，看看今天适合关注什么。</p>
-            <span className="home-cream-cta">开始今日指引 →</span>
+            {hasDailyToday ? (
+              <>
+                <p>你今天已经抽过牌了。</p>
+                <span className="home-cream-cta">查看今日结果 →</span>
+              </>
+            ) : (
+              <>
+                <p>每天一张牌，看看今天适合关注什么。</p>
+                <span className="home-cream-cta">开始今日指引 →</span>
+              </>
+            )}
           </Link>
-
-          <Link href="/draw" className="home-cream-card home-cream-card--tilt-r">
-            <span className="home-cream-deco" aria-hidden="true" style={{ fontSize: 36 }}>
-              ✧
-            </span>
-            <span className="home-cream-stack" aria-hidden="true">
-              <span />
-              <span />
-              <span />
-            </span>
+          <Link href="/ask" className="home-cream-card home-cream-card--tilt-r">
             <h2>灵感问牌</h2>
-            <p>写下你的问题，让牌给你一个方向性的提示。</p>
-            <span className="home-cream-cta">开始灵感问牌 →</span>
+            <p>写下你心中的问题，抽一张牌，获得一个方向性提示。</p>
+            <span className="home-cream-cta">开始问牌 →</span>
           </Link>
         </div>
       </div>

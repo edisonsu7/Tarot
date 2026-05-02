@@ -35,8 +35,8 @@ export default async function CardMeaningPage({ params, searchParams }: PageProp
       <PageShell>
         <div className={HOME_SURFACE}>
           <h1 style={{ ...sectionHeadingStyle, fontSize: 22 }}>没有找到这张牌</h1>
-          <Link className="mt-5 inline-flex" href="/cards" style={ghostLinkStyle}>
-            返回牌库
+          <Link className="mt-5 inline-flex" href="/daily/result" style={ghostLinkStyle}>
+            返回今日结果
           </Link>
         </div>
       </PageShell>

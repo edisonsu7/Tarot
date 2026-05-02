@@ -42,9 +42,12 @@ export function computeFanLayout(params: { cardCount: number; viewportW: number;
 
   const usableW = Math.min(vw, 1920) * 0.98;
   let cw = Math.floor(usableW / (n * 0.392));
-  const maxCw = Math.min(195, Math.floor(vw * 0.3));
+  const minCw = vw < 500 ? 62 : 50;
+  const maxCw = vw < 500
+    ? Math.min(140, Math.floor(vw * 0.38))
+    : Math.min(195, Math.floor(vw * 0.3));
   const maxByCardHeight = Math.floor((vh * 0.74) / 1.625);
-  cw = Math.max(50, Math.min(cw, maxCw, maxByCardHeight));
+  cw = Math.max(minCw, Math.min(cw, maxCw, maxByCardHeight));
 
   const ch = Math.round(cw * 1.625);
   const arcRoom = Math.min(Math.floor(vh * 0.94), 1020) - ch - 68;
@@ -161,15 +164,19 @@ export function oneLineConclusion(card: TarotCard, reversed: boolean) {
 
 export function suitableText(card: TarotCard) {
   const ks = (card.keywords || []).slice(0, 3);
-  const list = ks.length ? ks : ["整理", "沟通", "推进"];
-  return `适合：${list.join(" / ")} / 写计划 / 做一个小决定。`;
+  const list = ks.length ? ks : ['整理', '沟通', '推进'];
+  const joined = list.map((k) => `「${k}」`).join('、');
+  return `围绕${joined}做轻量推进，写下一个具体计划或完成一件一直在推进的小事，都比较合适。`;
 }
 
 export function notSuitableText(card: TarotCard, reversed: boolean) {
-  const base = "不适合：冲动决定 / 过度承诺 / 在情绪高点硬刚。";
   const ks = (card.keywords || []).slice(0, 2);
-  if (!reversed) return base;
-  return ks.length ? `${base} 尤其避免“${ks.join("、")}”上的极端做法。` : base;
+  if (reversed) {
+    return ks.length
+      ? `不建议在「${ks[0]}」相关的事上用力过猎，也不要在情绪不稳定时做重大决定。先把节奏稳下来再推进。`
+      : `不建议在情绪不稳定时做重大决定，也不要强行推进已经卡住的事情。给自己留一点空间。`;
+  }
+  return `不建议在情绪高点立刻承诺或做决定，也不要同时开启太多事情而分散精力。先稳住一件再说。`;
 }
 
 export { getMeaning };

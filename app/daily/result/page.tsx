@@ -1,5 +1,4 @@
 import { DailyResultView } from "@/components/DailyResultView";
-import { PageShell } from "@/components/homeLayout";
 
 export const metadata = {
   title: "今日指引 · 结果",
@@ -8,8 +7,8 @@ export const metadata = {
 
 export default function DailyResultPage() {
   return (
-    <PageShell>
+    <div className="home-cream-root mx-auto w-full px-3 sm:px-5">
       <DailyResultView />
-    </PageShell>
+    </div>
   );
 }

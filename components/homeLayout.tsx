@@ -36,9 +36,9 @@ export const siteTitleStyle: CSSProperties = {
 
 export const pageTitleStyle: CSSProperties = {
   margin: 0,
-  fontSize: 26,
-  fontWeight: 800,
-  letterSpacing: -0.08,
+  fontSize: 22,
+  fontWeight: 700,
+  letterSpacing: -0.06,
   lineHeight: 1.25,
   color: "var(--cream-ink)"
 };
@@ -59,8 +59,8 @@ export const bodyTextStyle: CSSProperties = {
 
 export const sectionHeadingStyle: CSSProperties = {
   margin: 0,
-  fontSize: 18,
-  fontWeight: 600,
+  fontSize: 16,
+  fontWeight: 700,
   lineHeight: 1.35,
   color: "var(--cream-ink)"
 };

@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(bash /Users/boyusu/.claude/statusline-command.sh)",
+      "Bash(npx tsc *)",
+      "Bash(npm run *)",
+      "Bash(python3 -c \"import json,sys; d=json.load\\(sys.stdin\\); print\\(list\\(d.get\\('dependencies',{}\\).keys\\(\\)\\)\\)\")",
+      "Bash(npm install *)",
+      "Bash(python3 -c \"import json,sys; d=json.load\\(sys.stdin\\); print\\(d['dependencies'].get\\('openai','not found'\\)\\)\")",
+      "Bash(node -e \"const o = require\\('openai'\\); console.log\\(Object.keys\\(o\\)\\)\")",
+      "Bash(node *)",
+      "Bash(curl *)",
+      "Bash(git *)"
+    ]
+  }
+}

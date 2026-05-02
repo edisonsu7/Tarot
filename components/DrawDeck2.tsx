@@ -11,7 +11,17 @@ import {
   DRAW_PICK_LAYOUT_CHROME_PX,
   FAN_VERTICAL_ANCHOR,
   fanCardLayoutStyle,
-  fanSlotTransform
+  fanSlotTransform,
+  sfxShuffle,
+  sfxFlip,
+  sfxPick,
+  randBool,
+  shuffleInPlace,
+  getCardById,
+  formatTitle,
+  joinKeywords,
+  suitableText,
+  notSuitableText
 } from "@/lib/dailyDrawHelpers";
 import { getDateKeyInTimeZone } from "@/lib/dateKey";
 import {
@@ -47,87 +57,6 @@ function normalizeQuestionType(raw: unknown): QuestionType {
   return "综合";
 }
 
-function playTone(params: { type: OscillatorType; from: number; to?: number; durMs: number; vol?: number }, enabled: boolean) {
-  if (!enabled) return;
-  try {
-    type WinAudio = Window & { webkitAudioContext?: typeof AudioContext };
-    const AC = window.AudioContext ?? (window as WinAudio).webkitAudioContext;
-    if (!AC) return;
-    const ctx = new AC();
-    const o = ctx.createOscillator();
-    const g = ctx.createGain();
-    o.type = params.type;
-    const now = ctx.currentTime;
-    o.frequency.setValueAtTime(params.from, now);
-    if (params.to != null) o.frequency.exponentialRampToValueAtTime(params.to, now + params.durMs / 1000);
-    g.gain.setValueAtTime(0.0001, now);
-    g.gain.exponentialRampToValueAtTime(params.vol ?? 0.05, now + 0.01);
-    g.gain.exponentialRampToValueAtTime(0.0001, now + params.durMs / 1000);
-    o.connect(g);
-    g.connect(ctx.destination);
-    o.start(now);
-    o.stop(now + params.durMs / 1000);
-    o.onended = () => ctx.close();
-  } catch {}
-}
-
-function sfxShuffle(enabled: boolean) {
-  playTone({ type: "triangle", from: 220, to: 120, durMs: 220, vol: 0.03 }, enabled);
-}
-function sfxFlip(enabled: boolean) {
-  playTone({ type: "sine", from: 880, to: 520, durMs: 140, vol: 0.04 }, enabled);
-}
-function sfxPick(enabled: boolean) {
-  playTone({ type: "square", from: 660, durMs: 90, vol: 0.02 }, enabled);
-}
-
-function randInt(maxExclusive: number) {
-  const buf = new Uint32Array(1);
-  crypto.getRandomValues(buf);
-  return buf[0]! % maxExclusive;
-}
-
-function randBool() {
-  return randInt(2) === 0;
-}
-
-function shuffleInPlace<T>(arr: T[]) {
-  for (let i = arr.length - 1; i > 0; i--) {
-    const j = randInt(i + 1);
-    [arr[i], arr[j]] = [arr[j]!, arr[i]!];
-  }
-  return arr;
-}
-
-function getCardById(id: string): TarotCard | null {
-  return (cards as TarotCard[]).find((c) => c.id === id) ?? null;
-}
-
-function formatTitle(card: TarotCard, isReversed: boolean) {
-  return `${card.nameCn}${isReversed ? "（逆位）" : "（正位）"}`;
-}
-
-function pickKeywords(card: TarotCard, max = 3) {
-  return (card.keywords || []).slice(0, max);
-}
-
-function joinKeywords(card: TarotCard, max = 2) {
-  const ks = pickKeywords(card, max);
-  return ks.length ? ks.join("、") : "当下最重要的一件事";
-}
-
-function suitableText(card: TarotCard) {
-  const ks = pickKeywords(card, 3);
-  const list = ks.length ? ks : ["整理", "沟通", "推进"];
-  return `适合：${list.join(" / ")} / 写计划 / 做一个小决定。`;
-}
-
-function notSuitableText(card: TarotCard, reversed: boolean) {
-  const base = "不适合：冲动决定 / 过度承诺 / 在情绪高点硬刚。";
-  const ks = pickKeywords(card, 2);
-  if (!reversed) return base;
-  return ks.length ? `${base} 尤其避免“${ks.join("、")}”上的极端做法。` : base;
-}
 
 function withCardFallback(cardId: string, nameForFallback: string) {
   return (e: React.SyntheticEvent<HTMLImageElement>) => {
@@ -145,15 +74,15 @@ function withCardFallback(cardId: string, nameForFallback: string) {
   };
 }
 
-function spreadPositions(type: SpreadType): string[] {
-  switch (type) {
+function spreadPositions(type: SpreadType, qt?: QuestionType): string[] {
+  const eff = qt ? effectiveSpread(type, qt) : type;
+  switch (eff) {
     case "single":
       return ["今日建议"];
-    case "three":
-      return ["现状", "阻碍", "建议"];
     case "love3":
       return ["我", "对方", "关系发展"];
     case "career3":
+    case "three":
       return ["现状", "阻碍", "建议"];
     default:
       return ["今日建议"];
@@ -165,29 +94,38 @@ function deckPickPhase(phase: Phase): boolean {
 }
 
 /** 扇面 / 选牌区中央提示 */
-function selectionHint(spread: SpreadType, pickedLen: number, phase: Phase): string {
-  const need = spreadPositions(spread).length;
+function selectionHint(spread: SpreadType, pickedLen: number, phase: Phase, qt?: QuestionType): string {
+  const positions = spreadPositions(spread, qt);
+  const need = positions.length;
   if (phase === "leaving" || pickedLen >= need) return "牌已选定，正在生成解读…";
-  if (phase === "revealing") return "正在翻开…";
-  if (phase === "shuffling") return "正在洗牌，请稍等…";
-  if (spread === "single") return "请选择一张牌。";
-  const next = spreadPositions(spread)[pickedLen];
-  if (!next) return "请选择一张牌。";
-  return `请选择第 ${pickedLen + 1} 张牌：${next}`;
+  if (phase === "revealing") return "翻开，看见。";
+  if (phase === "shuffling") return "感受牌在流动……";
+  if (spread === "single") return "哪一张在向你说话？";
+  const next = positions[pickedLen];
+  if (!next) return "哪一张在向你说话？";
+  return `第 ${pickedLen + 1} 张 · ${next}`;
 }
 
-/** 结果页标题行，如「三张牌解读｜综合」 */
+/** 根据问题类型把三张牌自动升格为对应子类型（love3 / career3） */
+function effectiveSpread(spread: SpreadType, qt: QuestionType): SpreadType {
+  if (spread === "three") {
+    if (qt === "感情") return "love3";
+    if (qt === "事业") return "career3";
+  }
+  return spread;
+}
+
+/** 结果页标题行，如「爱情三牌｜感情」 */
 function drawResultHeadline(spread: SpreadType, questionType: QuestionType): string {
+  const eff = effectiveSpread(spread, questionType);
   const head =
-    spread === "single"
+    eff === "single"
       ? "单张牌解读"
-      : spread === "three"
-        ? "三张牌解读"
-        : spread === "love3"
-          ? "爱情三牌解读"
-          : spread === "career3"
-            ? "事业三牌解读"
-            : "抽牌解读";
+      : eff === "love3"
+        ? "爱情三牌"
+        : eff === "career3"
+          ? "事业三牌"
+          : "三张牌解读";
   return `${head}｜${questionType}`;
 }
 
@@ -289,10 +227,12 @@ export function DrawDeck2({ feature = "mixed", pickOnly = false }: { feature?: F
   // Fixed sizes (do not adjust) — 非沉浸式选牌页横排用。
   const deckW = 140;
   const deckH = 199;
-  const pickCount = useMemo(
-    () => (immersivePick ? DAILY_FAN_COUNT : spread === "single" ? 5 : 9),
-    [immersivePick, spread]
-  );
+  const pickCount = useMemo(() => {
+    if (!immersivePick) return spread === "single" ? 5 : 9;
+    if (viewportW < 480) return 13;
+    if (viewportW < 640) return 17;
+    return DAILY_FAN_COUNT;
+  }, [immersivePick, spread, viewportW]);
 
   const fanMetrics = useMemo(() => {
     if (!immersivePick) return null;
@@ -317,7 +257,7 @@ export function DrawDeck2({ feature = "mixed", pickOnly = false }: { feature?: F
   /** 结果页左列牌图固定宽度，与 `.result-layout` 一致 */
   const RESULT_CARD_COL_W = 280;
   const resultCardImgH = Math.round((RESULT_CARD_COL_W * 3) / 2);
-  const pickSlotTotal = spreadPositions(spread).length;
+  const pickSlotTotal = spreadPositions(spread, questionType).length;
 
   useLayoutEffect(() => {
     getOrCreateUserId();
@@ -382,8 +322,14 @@ export function DrawDeck2({ feature = "mixed", pickOnly = false }: { feature?: F
               })
               .filter(Boolean) as Array<{ position: string; card: TarotCard; isReversed: boolean }>;
             if (nextPicked.length) {
-              const sp: SpreadType = payload.spread === "three" ? "three" : "single";
-              setSpread(sp);
+              const rawSp = payload.spread;
+              const sp: SpreadType =
+                rawSp === "single" ? "single"
+                : rawSp === "love3" ? "love3"
+                : rawSp === "career3" ? "career3"
+                : rawSp === "three" ? "three"
+                : nextPicked.length > 1 ? "three" : "single";
+              setSpread(sp === "love3" || sp === "career3" ? "three" : sp);
               setQuestion(typeof payload.question === "string" ? payload.question : "");
               if (payload.category != null) setQuestionType(normalizeQuestionType(payload.category));
               const drawnAt = typeof payload.createdAt === "string" ? payload.createdAt : new Date().toISOString();
@@ -397,7 +343,7 @@ export function DrawDeck2({ feature = "mixed", pickOnly = false }: { feature?: F
                 });
               } else {
                 setStored({
-                  type: "three",
+                  type: sp,
                   picks: nextPicked.map((p) => ({ position: p.position, cardId: p.card.id, isReversed: p.isReversed })),
                   drawnAt,
                   question: payload.question?.trim() ? payload.question.trim() : undefined,
@@ -417,7 +363,7 @@ export function DrawDeck2({ feature = "mixed", pickOnly = false }: { feature?: F
     if (d) {
       if ("picks" in d) {
         if (pickOnly && isDailyFeature) {
-          router.replace("/daily");
+          router.replace("/daily/result");
           return;
         }
         const restored = d.picks
@@ -582,14 +528,16 @@ export function DrawDeck2({ feature = "mixed", pickOnly = false }: { feature?: F
       record = { cardId: nextPicked[0]!.card.id, isReversed: nextPicked[0]!.isReversed, drawnAt, question: qSave, questionType: qtSave };
     } else {
       const picks: StoredPick[] = nextPicked.map((p) => ({ cardId: p.card.id, isReversed: p.isReversed, position: p.position }));
-      record = { type: spread, picks, drawnAt, question: qSave, questionType: qtSave };
+      const savedSpread = effectiveSpread(spread, qtSave);
+      record = { type: savedSpread, picks, drawnAt, question: qSave, questionType: qtSave };
     }
     try {
+      const effSp = spread === "single" ? "single" : effectiveSpread(spread, questionType);
       sessionStorage.setItem(
         "tarot:lastPickPayload",
         JSON.stringify({
           mode: isDrawFeature ? "question" : "daily",
-          spread,
+          spread: effSp,
           question: question.trim() || "",
           category: questionType,
           selectedCards: nextPicked.map((p) => ({
@@ -619,7 +567,7 @@ export function DrawDeck2({ feature = "mixed", pickOnly = false }: { feature?: F
     if (pickedIdxs.includes(_index)) return;
     const opt = deckOptions[_index];
     if (!opt) return;
-    const positions = spreadPositions(spread);
+    const positions = spreadPositions(spread, questionType);
     const nextPosition = positions[picked.length];
     if (!nextPosition) return;
 
@@ -653,45 +601,45 @@ export function DrawDeck2({ feature = "mixed", pickOnly = false }: { feature?: F
   async function copyDrawResult() {
     try {
       const c0 = picked[0]!;
+      const origin = typeof window !== "undefined" ? window.location.origin : "";
       const lines: string[] = [];
-      lines.push(`${formatTitle(c0.card, c0.isReversed)} / ${c0.card.nameEn}`);
+
       if (isDailyFeature && spread === "single") {
+        // 与页面显示顺序完全一致：牌名 → 关键词 → 一句话提醒 → 今天怎么过 → 完整牌义
+        lines.push(`【今日指引】${formatTitle(c0.card, c0.isReversed)} / ${c0.card.nameEn}`);
         lines.push(`关键词：${(c0.card.keywords ?? []).slice(0, 8).join("、") || "-"}`);
         lines.push(`一句话提醒：${oneLineConclusion("综合", c0.card, c0.isReversed)}`);
         lines.push(`今天适合：${suitableText(c0.card)}`);
-        lines.push(`今天不适合：${notSuitableText(c0.card, c0.isReversed)}`);
+        lines.push(`不适合：${notSuitableText(c0.card, c0.isReversed)}`);
+        lines.push(`完整牌义：${getMeaningPreview(c0.card, c0.isReversed, 200)}`);
+        lines.push(`详情：${origin}${cardMeaningPagePath(c0.card.id, c0.isReversed, { from: pathname })}`);
       } else if (spread === "single") {
+        // 灵感问牌单张：问题 → 牌名 → 要点 → 接下来 → 留意 → 完整牌义
         if (question.trim()) lines.push(`问题：${question.trim()}`);
         lines.push(`类型：${questionType}`);
-        lines.push(`关键词：${(c0.card.keywords ?? []).slice(0, 8).join("、") || "-"}`);
-        lines.push(`一句话：${oneLineConclusion(questionType, c0.card, c0.isReversed)}`);
-        lines.push(`核心提示：${coreTip(questionType, c0.card, c0.isReversed)}`);
-        lines.push(`行动建议：${doNow(questionType, c0.card, c0.isReversed)}`);
-        lines.push(`需要避免：${avoidToday(questionType, c0.isReversed)}`);
-        lines.push(`牌义：${getMeaning(c0.card, c0.isReversed) || "-"}`);
+        lines.push(`${formatTitle(c0.card, c0.isReversed)} / ${c0.card.nameEn}`);
+        lines.push(`要点：${(c0.card.keywords ?? []).slice(0, 5).join("、")} · ${oneLineConclusion(questionType, c0.card, c0.isReversed)}`);
+        lines.push(`接下来：${coreTip(questionType, c0.card, c0.isReversed)}`);
+        lines.push(`行动：${doNow(questionType, c0.card, c0.isReversed)}`);
+        lines.push(`留意：${avoidToday(questionType, c0.isReversed)}`);
+        lines.push(`完整牌义：${getMeaningPreview(c0.card, c0.isReversed, 200)}`);
+        lines.push(`详情：${origin}${cardMeaningPagePath(c0.card.id, c0.isReversed, { from: pathname })}`);
       } else {
+        // 三张牌：问题 → 标题 → 整体结论 → 核心提醒 → 各牌
         if (question.trim()) lines.push(`问题：${question.trim()}`);
         lines.push(`类型：${questionType}`);
+        lines.push(drawResultHeadline(spread, questionType));
         lines.push(`整体结论：${summary3(questionType, picked)}`);
-        lines.push(`核心提醒：${spreadFinalTendency(spread, picked)}`);
+        lines.push(`核心提醒：${spreadFinalTendency(effectiveSpread(spread, questionType), picked)}`);
         lines.push("");
         for (const p of picked) {
-          lines.push(`${p.position}：${formatTitle(p.card, p.isReversed)}`);
-          lines.push(getMeaning(p.card, p.isReversed) || "-");
+          lines.push(`【${p.position}】${formatTitle(p.card, p.isReversed)} / ${p.card.nameEn}`);
+          lines.push(getMeaningPreview(p.card, p.isReversed, 150));
+          lines.push(`详情：${origin}${cardMeaningPagePath(p.card.id, p.isReversed, { from: pathname })}`);
           lines.push("");
         }
       }
-      const origin = typeof window !== "undefined" ? window.location.origin : "";
-      if (spread === "single") {
-        lines.push("");
-        lines.push(`深度牌义：${origin}${cardMeaningPagePath(picked[0]!.card.id, picked[0]!.isReversed, { from: pathname })}`);
-      } else {
-        lines.push("");
-        lines.push("各张深度牌义：");
-        for (const p of picked) {
-          lines.push(`${p.position}：${origin}${cardMeaningPagePath(p.card.id, p.isReversed, { from: pathname })}`);
-        }
-      }
+
       await navigator.clipboard.writeText(lines.join("\n").trim());
       setCopied(true);
       window.setTimeout(() => setCopied(false), 1200);
@@ -709,7 +657,7 @@ export function DrawDeck2({ feature = "mixed", pickOnly = false }: { feature?: F
           <div style={{ display: "grid", gap: 4 }}>
             <div className="cream-card-title">
               {phase === "result"
-                ? "Tarot"
+                ? "今日解读"
                 : phase === "shuffling"
                   ? "正在洗牌"
                   : deckPickPhase(phase)
@@ -747,56 +695,24 @@ export function DrawDeck2({ feature = "mixed", pickOnly = false }: { feature?: F
             {phase === "result" && isDrawFeature && (
               <button
                 type="button"
-                onClick={() => {
-                  reset();
-                }}
-                style={{
-                  height: 40,
-                  padding: "0 14px",
-                  borderRadius: 14,
-                  border: "1px solid var(--ui-border)",
-                  background: "var(--ui-surface)",
-                  color: "var(--ui-strong)",
-                  fontSize: 14,
-                  fontWeight: 800
-                }}
+                onClick={() => router.push("/draw")}
+                className="btn-tarot-secondary"
+                style={{ height: 40, padding: "0 14px", fontSize: 14 }}
               >
-                再抽一次
+                再问一次
               </button>
             )}
             <Link
               href="/cards"
-              style={{
-                height: 40,
-                padding: "0 14px",
-                borderRadius: 14,
-                border: "1px solid var(--ui-border)",
-                background: "var(--ui-surface)",
-                color: "var(--ui-strong)",
-                fontSize: 14,
-                fontWeight: 800,
-                display: "inline-flex",
-                alignItems: "center",
-                textDecoration: "none"
-              }}
+              className="btn-tarot-secondary"
+              style={{ height: 40, padding: "0 14px", fontSize: 14, display: "inline-flex", alignItems: "center", textDecoration: "none" }}
             >
               去牌库
             </Link>
             <Link
               href="/about"
-              style={{
-                height: 40,
-                padding: "0 14px",
-                borderRadius: 14,
-                border: "1px solid var(--ui-border)",
-                background: "var(--ui-surface)",
-                color: "var(--ui-strong)",
-                fontSize: 14,
-                fontWeight: 800,
-                display: "inline-flex",
-                alignItems: "center",
-                textDecoration: "none"
-              }}
+              className="btn-tarot-secondary"
+              style={{ height: 40, padding: "0 14px", fontSize: 14, display: "inline-flex", alignItems: "center", textDecoration: "none" }}
             >
               说明
             </Link>
@@ -807,36 +723,6 @@ export function DrawDeck2({ feature = "mixed", pickOnly = false }: { feature?: F
           <>
         <div style={{ height: 8 }} />
         <div style={{ display: "grid", gap: 10 }}>
-          {!isSeparatedFeature && (
-            <div style={{ width: "100%", display: "flex", gap: 10, flexWrap: "wrap", alignItems: "center" }}>
-              <div style={{ fontSize: 12, color: "var(--ui-body)" }}>首页路径</div>
-              <button
-                type="button"
-                onClick={() => {
-                  setHomePath("daily");
-                  setMode("daily");
-                  setSpread("single");
-                  setQuestion("");
-                }}
-                className={`ios-chip ${homePath === "daily" ? "ios-chip-active" : ""}`}
-              >
-                今日指引
-              </button>
-              <button
-                type="button"
-                onClick={() => {
-                  setHomePath("question");
-                }}
-                className={`ios-chip ${homePath === "question" ? "ios-chip-active" : ""}`}
-              >
-                灵感问牌
-              </button>
-              {homePath === "daily" && (
-                <div style={{ fontSize: 12, color: "var(--ui-dim)" }}>每日锁定 · 单张牌 · 自动给今日建议</div>
-              )}
-            </div>
-          )}
-
           <div style={{ width: "100%", display: "grid", gap: 8 }}>
             {!isDailyFeature && homePath === "question" && (
               <>
@@ -893,31 +779,8 @@ export function DrawDeck2({ feature = "mixed", pickOnly = false }: { feature?: F
             )}
           </div>
 
-          {!isSeparatedFeature && (
-            <>
-              <div style={{ fontSize: 12, color: "var(--ui-body)" }}>模式</div>
-              {homePath === "daily" ? (
-                <span className="ios-chip ios-chip-active">每日一次锁定</span>
-              ) : (
-                <>
-                  <button type="button" onClick={() => setMode("test")} className={`ios-chip ${mode === "test" ? "ios-chip-active" : ""}`}>
-                    测试可重抽
-                  </button>
-                  <button type="button" onClick={() => setMode("daily")} className={`ios-chip ${mode === "daily" ? "ios-chip-active" : ""}`}>
-                    每日一次锁定
-                  </button>
-                </>
-              )}
-            </>
-          )}
           {isDailyFeature && <div style={{ fontSize: 12, color: "var(--ui-dim)" }}>今日指引固定为单张牌；每天只锁定一次。</div>}
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12, flexWrap: "wrap" }}>
-            {isDrawFeature && (
-              <div style={{ fontSize: 12, color: "var(--ui-dim)" }}>
-                流程：1. 输入问题  2. 选类型与牌阵  3. 开始抽牌  4. 从牌背中选择
-                {!question.trim() ? "（未输入问题，将按综合运势解读）" : ""}
-              </div>
-            )}
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "flex-end", gap: 12 }}>
             <button
               type="button"
               onClick={() => {
@@ -931,7 +794,7 @@ export function DrawDeck2({ feature = "mixed", pickOnly = false }: { feature?: F
                 });
               }}
               className="ios-chip"
-              style={{ transform: "scale(0.92)", transformOrigin: "right center", opacity: 0.78, marginLeft: "auto" }}
+              style={{ transform: "scale(0.92)", transformOrigin: "right center", opacity: 0.78 }}
             >
               音效：{sfx ? "开" : "关"}
             </button>
@@ -943,7 +806,7 @@ export function DrawDeck2({ feature = "mixed", pickOnly = false }: { feature?: F
       )}
 
       {phase === "result" && picked.length > 0 ? (
-        <div className="result-container">
+        <div className="result-container" style={{ paddingBottom: "88px" }}>
           {picked.length > 1 ? (
             <div key={`result-${transitionKey}`} className="draw-result-multi draw-result-reveal-stage">
               {isDrawFeature && (
@@ -977,7 +840,7 @@ export function DrawDeck2({ feature = "mixed", pickOnly = false }: { feature?: F
                       height={345}
                     />
                     <div className="draw-result-triple-bracket">
-                      [{p.position}] {formatTitle(p.card, p.isReversed)}
+                      {p.position} · {formatTitle(p.card, p.isReversed)}
                     </div>
                   </div>
                 ))}
@@ -989,7 +852,7 @@ export function DrawDeck2({ feature = "mixed", pickOnly = false }: { feature?: F
                 </div>
                 <div className="draw-result-interpret draw-result-interpret--lift">
                   <p className="draw-result-interpret__label">核心提醒</p>
-                  <p className="draw-result-interpret__text">{spreadFinalTendency(spread, picked)}</p>
+                  <p className="draw-result-interpret__text">{spreadFinalTendency(effectiveSpread(spread, questionType), picked)}</p>
                 </div>
               </div>
               <p className="draw-result-slots-section-title">各位置解读</p>
@@ -1049,7 +912,7 @@ export function DrawDeck2({ feature = "mixed", pickOnly = false }: { feature?: F
                 )}
                 <section className="draw-result-meta draw-result-meta--single">
                   <h2 className="draw-result-meta__title">{drawResultHeadline(spread, questionType)}</h2>
-                  <p className="draw-result-meta__lines" style={{ margin: 0, fontSize: 17, fontWeight: 800, color: "var(--ui-strong)", lineHeight: 1.4 }}>
+                  <p className="draw-result-meta__lines" style={{ margin: 0, fontSize: 22, fontWeight: 800, color: "var(--ui-strong)", lineHeight: 1.3 }}>
                     {formatTitle(picked[0]!.card, picked[0]!.isReversed)}
                   </p>
                   <p className="draw-result-meta__sub" style={{ margin: "4px 0 0", fontSize: 14, color: "var(--ui-body)" }}>
@@ -1137,10 +1000,10 @@ export function DrawDeck2({ feature = "mixed", pickOnly = false }: { feature?: F
 
           {immersivePick && isDrawFeature && (
             <div className="cream-inner-card cream-inner-card--row" style={{ marginTop: 18, justifyContent: "center" }}>
-              <button type="button" onClick={() => reset()} className="btn-tarot-secondary" style={{ padding: "10px 18px", fontSize: 14, fontWeight: 800 }}>
-                重新问牌
+              <button type="button" onClick={() => router.push("/draw")} className="btn-tarot-secondary" style={{ padding: "9px 16px", fontSize: 14, fontWeight: 700 }}>
+                再问一次
               </button>
-              <button type="button" onClick={() => void copyDrawResult()} className="btn-tarot-secondary" style={{ padding: "10px 18px", fontSize: 14, fontWeight: 800 }}>
+              <button type="button" onClick={() => void copyDrawResult()} className="btn-tarot-secondary" style={{ padding: "9px 16px", fontSize: 14, fontWeight: 700 }}>
                 {copied ? "已复制" : "复制结果"}
               </button>
             </div>
@@ -1167,7 +1030,6 @@ export function DrawDeck2({ feature = "mixed", pickOnly = false }: { feature?: F
               type="button"
               onClick={() => start()}
               className="cream-inner-card cream-stage-card"
-              aria-label="开始洗牌"
               style={{
                 flex: 1,
                 minHeight: 420,
@@ -1176,9 +1038,23 @@ export function DrawDeck2({ feature = "mixed", pickOnly = false }: { feature?: F
                 background: "var(--cream-card)",
                 boxShadow:
                   "0 1px 0 rgba(255, 255, 255, 0.55) inset, 0 22px 56px -40px rgba(60,45,30,0.14)",
-                transition: "transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease"
+                transition: "transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease",
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: 10,
+                textAlign: "center"
               }}
-            />
+            >
+              <span style={{ fontSize: 36, opacity: 0.22, lineHeight: 1 }} aria-hidden="true">☽</span>
+              <span style={{ fontSize: 16, fontWeight: 700, color: "var(--cream-ink)", lineHeight: 1.5 }}>
+                {isDailyFeature ? "从牌堆中取一张" : "专注你的问题，点击开始"}
+              </span>
+              <span style={{ fontSize: 13, color: "var(--cream-muted)", lineHeight: 1.65 }}>
+                轻触洗牌
+              </span>
+            </button>
           )}
           {(phase === "shuffling" || deckPickPhase(phase)) && fanMetrics && deckOptions.length >= pickCount && (
             <div
@@ -1234,7 +1110,7 @@ export function DrawDeck2({ feature = "mixed", pickOnly = false }: { feature?: F
                       已选 {picked.length} / {pickSlotTotal} 张
                     </div>
                     <div className="home-cream-lead" style={{ margin: 0, fontSize: 15, lineHeight: 1.45 }}>
-                      {selectionHint(spread, picked.length, phase)}
+                      {selectionHint(spread, picked.length, phase, questionType)}
                     </div>
                   </div>
                 </div>
@@ -1545,7 +1421,7 @@ export function DrawDeck2({ feature = "mixed", pickOnly = false }: { feature?: F
                   ? "正在准备牌阵…"
                   : "先完成上方选择，然后点击“开始抽牌”进入选牌页。"
                 : deckPickPhase(phase) || phase === "shuffling"
-                  ? selectionHint(spread, picked.length, phase)
+                  ? selectionHint(spread, picked.length, phase, questionType)
                   : ""}
             </div>
           </div>
@@ -1556,10 +1432,29 @@ export function DrawDeck2({ feature = "mixed", pickOnly = false }: { feature?: F
         <div className={HOME_SURFACE}>
           <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", justifyContent: "space-between", gap: 10 }}>
             <span style={{ fontSize: 13, color: "var(--ui-body)" }}>本次抽牌已写入本机历史。</span>
-            <Link href="/history" className="ios-chip ios-chip-active" style={{ textDecoration: "none", fontSize: 13, fontWeight: 800 }}>
+            <Link href="/history" className="ios-chip ios-chip-active" style={{ textDecoration: "none", fontSize: 13, fontWeight: 700 }}>
               历史记录 →
             </Link>
           </div>
+        </div>
+      )}
+
+      {phase === "result" && picked.length > 0 && !immersivePick && (
+        <div className="result-fixed-bar">
+          <button
+            type="button"
+            onClick={() => isDrawFeature ? router.push("/draw") : reset()}
+            className="btn-tarot-secondary result-fixed-bar__btn"
+          >
+            {isDailyFeature ? "重新指引" : "再问一次"}
+          </button>
+          <button
+            type="button"
+            onClick={() => void copyDrawResult()}
+            className="btn-tarot-primary result-fixed-bar__btn"
+          >
+            {copied ? "✓ 已复制" : "复制结果"}
+          </button>
         </div>
       )}
     </div>

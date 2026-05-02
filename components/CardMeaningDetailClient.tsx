@@ -151,14 +151,14 @@ export function CardMeaningDetailClient({
           <Link
             href={backHref}
             className="btn-tarot-secondary"
-            style={{ padding: "10px 18px", fontSize: 14, fontWeight: 800, textDecoration: "none", display: "inline-flex", alignItems: "center" }}
+            style={{ padding: "9px 16px", fontSize: 14, fontWeight: 700, textDecoration: "none", display: "inline-flex", alignItems: "center" }}
           >
             ← {backLabel}
           </Link>
-          <button type="button" onClick={redraw} className="btn-tarot-secondary" style={{ padding: "10px 18px", fontSize: 14, fontWeight: 800 }}>
+          <button type="button" onClick={redraw} className="btn-tarot-secondary" style={{ padding: "9px 16px", fontSize: 14, fontWeight: 700 }}>
             重新问牌
           </button>
-          <button type="button" onClick={() => void copyResult()} className="btn-tarot-secondary" style={{ padding: "10px 18px", fontSize: 14, fontWeight: 800 }}>
+          <button type="button" onClick={() => void copyResult()} className="btn-tarot-secondary" style={{ padding: "9px 16px", fontSize: 14, fontWeight: 700 }}>
             {copied ? "已复制" : "复制结果"}
           </button>
         </div>
