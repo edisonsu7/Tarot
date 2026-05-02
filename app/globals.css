@@ -1102,6 +1102,7 @@ html.theme-cream body {
     radial-gradient(900px 520px at 85% 18%, rgba(201, 166, 107, 0.12), transparent 58%),
     radial-gradient(900px 520px at 12% 22%, rgba(255, 255, 255, 0.35), transparent 55%),
     var(--cream-bg-2) !important;
+  background-attachment: fixed !important;
   color: var(--cream-ink) !important;
   font-family: var(--font-tarot-serif);
 }
@@ -1112,6 +1113,7 @@ html.theme-cream[data-theme="moon"] body {
     radial-gradient(900px 520px at 85% 18%, rgba(201, 166, 107, 0.12), transparent 58%),
     radial-gradient(900px 520px at 12% 22%, rgba(255, 255, 255, 0.35), transparent 55%),
     var(--cream-bg-2) !important;
+  background-attachment: fixed !important;
   color: var(--cream-ink) !important;
   font-family: var(--font-tarot-serif);
 }
@@ -1679,6 +1681,16 @@ html.theme-cream .topnav-share {
   margin: 0 auto;
 }
 
+/* 首页：仅双入口卡片，无外层 home-cream-panel */
+.home-landing {
+  width: 100%;
+}
+
+.home-cream-dual--landing {
+  margin-top: 0;
+  flex: unset;
+}
+
 .home-cream-panel {
   position: relative;
   isolation: isolate;
@@ -1898,24 +1910,37 @@ html.theme-cream .topnav-share {
   max-width: 34ch;
 }
 
+/* 首页入口 CTA：与 .result-share-btn 同气质的浅底描边，避免实心大金按钮 */
 .home-cream-cta {
   margin-top: auto;
   width: fit-content;
   align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   border-radius: 999px;
-  padding: 12px 20px;
-  font-size: 14px;
+  padding: 0 20px;
+  min-height: 44px;
+  font-size: 15px;
   font-weight: 700;
-  letter-spacing: 0.03em;
-  color: var(--btn-primary-text, #fff);
-  background: var(--btn-primary, #b88a3d);
-  border: 1px solid rgba(255, 255, 255, 0.22);
-  box-shadow: 0 10px 28px -12px rgba(80, 55, 28, 0.35);
-  transition: background 0.18s ease, transform 0.18s ease;
+  letter-spacing: 0.3px;
+  color: var(--cream-ink);
+  background: rgba(150, 120, 80, 0.12);
+  border: 1px solid rgba(150, 120, 80, 0.55);
+  box-shadow: none;
+  transition: background 0.18s ease, border-color 0.18s ease;
 }
 
 html.theme-cream .home-cream-cta:hover {
-  background: var(--btn-primary-hover, #a57934);
+  background: rgba(150, 120, 80, 0.2);
+  border-color: rgba(150, 120, 80, 0.65);
+}
+
+@media (max-width: 480px) {
+  .home-cream-cta {
+    min-height: 42px;
+    font-size: 15px;
+  }
 }
 
 /* 与首页子卡同源：内嵌块、选牌槽、洗牌提示等 */
@@ -2045,6 +2070,17 @@ html.theme-cream .home-cream-cta:hover {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+}
+
+@media (max-width: 640px) {
+  .card-meaning-detail-header {
+    grid-template-columns: 1fr;
+  }
+
+  .card-meaning-detail-header__img {
+    max-width: min(72vw, 260px);
+    margin: 0 auto;
+  }
 }
 
 /* 沉浸抽牌：不要在主 card 上再堆一层「内卡片」容器 */
@@ -2204,23 +2240,43 @@ html.theme-cream .result-fixed-bar__btn {
 
 /* 页脚：与主体同宽居中 */
 .site-footer {
+  position: relative;
+  z-index: 0;
   width: 100%;
   max-width: var(--site-content-max);
-  margin: 24px auto 0;
-  padding: 0 18px 40px;
+  margin: 12px auto 0;
+  padding: 12px 18px 24px;
+  text-align: center;
+  color: var(--cream-muted, #5e5348);
+  background: transparent;
   border-top: none;
-  padding-top: 12px;
+  box-shadow: none;
+  backdrop-filter: none;
+}
+
+.site-footer::before,
+.site-footer::after {
+  display: none;
 }
 
 .site-footer-inner {
   max-width: 720px;
   margin: 0 auto;
-  text-align: center;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  backdrop-filter: none;
+  padding: 0;
   display: grid;
   gap: 10px;
   font-size: 13px;
   line-height: 1.65;
   color: var(--cream-muted, #5e5348);
+}
+
+.site-footer-inner::before,
+.site-footer-inner::after {
+  display: none;
 }
 
 html.theme-cream .site-footer-inner {
@@ -2638,10 +2694,268 @@ html.theme-cream .lg\:border-white\/10 {
   font-weight: 500;
   transition: color 0.15s ease;
   margin-left: auto;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
 }
 
 .daily-rv2-more:hover {
   color: var(--cream-ink);
+}
+
+@media (max-width: 480px) {
+  .daily-rv2-spacer {
+    display: none;
+  }
+
+  .daily-rv2-actions {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+  }
+
+  .daily-rv2-more {
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 18px;
+    border: 1px solid rgba(150, 120, 80, 0.35) !important;
+    border-radius: 999px;
+    background: rgba(255, 252, 247, 0.65) !important;
+    color: var(--cream-ink);
+    margin-left: 0;
+    font-size: 13px;
+    font-weight: 600;
+  }
+}
+
+/* ===== Result page: v2 action hierarchy ===== */
+.result-actions-v2 {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  max-width: 280px;
+  margin: 8px auto 24px;
+  box-sizing: border-box;
+}
+
+/* Primary share button — fixed-width centered pill; align-self: center prevents flex-stretch */
+.result-share-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  align-self: center;
+  text-decoration: none;
+  cursor: pointer;
+  border-radius: 999px;
+  border: 1px solid rgba(150, 120, 80, 0.55);
+  background: rgba(150, 120, 80, 0.12);
+  color: var(--cream-ink);
+  font-size: 15px;
+  font-weight: 700;
+  height: 44px;
+  width: 200px;
+  white-space: nowrap;
+  transition: background 0.18s ease, border-color 0.18s ease;
+  box-sizing: border-box;
+  letter-spacing: 0.3px;
+}
+
+.result-share-btn:hover:not(:disabled) {
+  background: rgba(150, 120, 80, 0.2);
+  border-color: rgba(150, 120, 80, 0.65);
+}
+
+.result-share-btn:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+/* Text links row — lightweight, no borders */
+.result-actions-links {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0;
+  font-size: 15px;
+  line-height: 1.5;
+  color: var(--cream-muted);
+  text-align: center;
+}
+
+.result-text-link {
+  background: none;
+  border: none;
+  padding: 0;
+  font: inherit;
+  color: var(--cream-muted);
+  text-decoration: none;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: color 0.15s ease;
+  /* comfortable tap target without padding expanding layout */
+  display: inline-flex;
+  align-items: center;
+  min-height: 32px;
+  padding: 0 6px;
+}
+
+.result-text-link:hover:not(:disabled) {
+  color: var(--cream-ink);
+}
+
+.result-action-separator {
+  color: var(--cream-muted);
+  opacity: 0.65;
+  user-select: none;
+  flex-shrink: 0;
+}
+
+/* Desktop */
+@media (min-width: 768px) {
+  .result-actions-v2 {
+    max-width: 300px;
+    margin-top: 12px;
+    margin-bottom: 24px;
+  }
+
+  .result-share-btn {
+    width: 220px;
+  }
+}
+
+@media (max-width: 480px) {
+  .result-actions-v2 {
+    max-width: 280px;
+    margin: 8px auto 20px;
+    gap: 12px;
+  }
+
+  .result-share-btn {
+    height: 42px;
+    font-size: 15px;
+    width: 200px;
+  }
+
+  .result-actions-links {
+    font-size: 14px;
+  }
+}
+
+/* Keep secondary-btn only for CardMeaningDetailClient back link */
+.result-secondary-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  cursor: pointer;
+  border-radius: 999px;
+  border: 1px solid rgba(150, 120, 80, 0.3);
+  background: rgba(255, 252, 247, 0.5);
+  color: var(--cream-ink);
+  font-size: 13px;
+  font-weight: 600;
+  padding: 0 20px;
+  height: 40px;
+  width: 100%;
+  max-width: 320px;
+  white-space: nowrap;
+  transition: background 0.18s ease, border-color 0.18s ease;
+  box-sizing: border-box;
+}
+
+.result-secondary-btn:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.75);
+  border-color: rgba(150, 120, 80, 0.42);
+}
+
+/* ===== Result page: legacy action buttons (kept for CardMeaningDetailClient) ===== */
+.result-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  justify-content: center;
+  margin-top: 4px;
+  padding-bottom: 4px;
+}
+
+.result-action-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  cursor: pointer;
+  border-radius: 999px;
+  border: 1px solid rgba(150, 120, 80, 0.35);
+  background: rgba(255, 252, 247, 0.65);
+  color: var(--cream-ink);
+  font-size: 13px;
+  font-weight: 600;
+  padding: 9px 18px;
+  min-height: 44px;
+  white-space: nowrap;
+  transition: background 0.18s ease, border-color 0.18s ease;
+  box-sizing: border-box;
+}
+
+.result-action-btn:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.88);
+  border-color: rgba(150, 120, 80, 0.45);
+}
+
+.result-action-btn:disabled {
+  opacity: 0.55;
+  cursor: default;
+}
+
+@media (max-width: 480px) {
+  .result-actions {
+    width: 100%;
+    max-width: 292px;
+    margin-left: auto;
+    margin-right: auto;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+    margin-top: 16px;
+    justify-items: stretch;
+  }
+
+  .result-action-btn {
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+    height: 42px;
+    min-height: 42px;
+    max-height: 42px;
+    padding: 0 8px;
+    font-size: 14px;
+    font-weight: 600;
+    box-sizing: border-box;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+
+@media (max-width: 340px) {
+  .result-actions {
+    max-width: 260px;
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  .result-action-btn {
+    height: 40px;
+    min-height: 40px;
+    max-height: 40px;
+    font-size: 13px;
+  }
 }
 
 /* ===== Focus: suppress outline on mouse click, keep for keyboard ===== */
@@ -2662,9 +2976,14 @@ html.theme-cream .lg\:border-white\/10 {
   gap: 12px;
   max-width: 480px;
   margin: 0 auto;
-  padding: 14px 2px 40px;
+  padding: 14px 2px 0;
   box-sizing: border-box;
   width: 100%;
+}
+
+/* Prevent flex-1 main from stretching short result pages and pushing footer down */
+body:has(.result-page-wrap) main {
+  flex: unset;
 }
 
 /* ===== Unified reading panel (Daily + Ask result pages) ===== */
@@ -2755,6 +3074,137 @@ html.theme-cream .lg\:border-white\/10 {
   color: var(--cream-muted);
   opacity: 0.55;
   text-align: center;
+}
+
+/* ===== /ask 写问题：与 result-page-wrap + draw 提示 + reading-panel 同一视觉系统 ===== */
+.result-page-wrap.ask-form-page {
+  /* 继承 result-page-wrap 的 max-width / gap / padding-x；仅微调顶部呼吸，接近抽牌页落版 */
+  padding-top: clamp(16px, 5vh, 44px);
+}
+
+/* 标题下的辅助句：与 draw 页 ask-fan-sub 同源，居中收窄，层级低于 ask-fan-hint */
+.result-page-wrap.ask-form-page > .ask-fan-sub {
+  text-align: center;
+  line-height: 1.65;
+  max-width: 36ch;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.ask-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 0;
+  width: 100%;
+}
+
+/* 仅主按钮时不必保留 result-actions-v2 的大下边距，说明句紧跟其下 */
+.ask-form .result-actions-v2 {
+  margin-bottom: 0;
+}
+
+.ask-form-field {
+  width: 100%;
+}
+
+/* 与 .reading-panel 同源：背景、边、圆角、内边距、正文字号行高 */
+.ask-form-textarea {
+  width: 100%;
+  min-height: 140px;
+  resize: none;
+  display: block;
+  margin: 0;
+  box-sizing: border-box;
+  background: var(--cream-card, rgba(255, 252, 247, 0.7));
+  border: 1px solid var(--cream-line);
+  border-radius: 14px;
+  padding: 12px 16px;
+  font: inherit;
+  font-size: 14px;
+  line-height: 1.65;
+  color: var(--cream-ink);
+}
+
+.ask-form-textarea::placeholder {
+  color: var(--cream-muted);
+  opacity: 0.7;
+}
+
+.ask-form-textarea:focus-visible {
+  outline: none;
+  border-color: rgba(150, 120, 80, 0.45);
+  box-shadow: 0 0 0 2px rgba(150, 120, 80, 0.1);
+}
+
+.ask-form-textarea--error {
+  border-color: rgba(180, 60, 50, 0.45);
+}
+
+.ask-form-textarea--error:focus-visible {
+  box-shadow: 0 0 0 2px rgba(180, 60, 50, 0.12);
+}
+
+.ask-form-error {
+  margin: 6px 0 0;
+  font-size: 13px;
+  color: rgba(160, 60, 50, 0.9);
+}
+
+/* 辅助字数：体量接近 result 页 muted / ask-result-fallback-note */
+.ask-form-count {
+  margin: 6px 0 0;
+  text-align: right;
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--cream-muted);
+  opacity: 0.55;
+}
+
+/* /ask 主按钮下：整句辅助说明（ask-fan-sub 量级），仅「直接抽一张」可点；全员 font-weight 400、muted */
+.ask-form-skip-line {
+  margin: 0;
+  width: 100%;
+  max-width: 36ch;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+  font-size: 12px;
+  line-height: 1.65;
+  font-weight: 400;
+  color: var(--cream-muted);
+  opacity: 0.58;
+}
+
+.ask-form-skip-embed {
+  display: inline;
+  margin: 0;
+  padding: 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+  font: inherit;
+  font-size: inherit;
+  line-height: inherit;
+  font-weight: 400;
+  letter-spacing: inherit;
+  color: var(--cream-muted);
+  opacity: 0.88;
+  text-decoration: underline;
+  text-decoration-style: dotted;
+  text-underline-offset: 2px;
+  vertical-align: baseline;
+}
+
+.ask-form-skip-embed:hover {
+  opacity: 1;
+  color: var(--ui-dim, rgba(94, 83, 72, 0.78));
+}
+
+@media (max-width: 480px) {
+  .ask-form-textarea {
+    min-height: 120px;
+  }
 }
 
 /* ===== Ask draw – 7-card fan layout ===== */
@@ -2889,6 +3339,14 @@ html.theme-cream .lg\:border-white\/10 {
   pointer-events: none;
   filter: none !important;
   transition: opacity 0.28s ease;
+}
+
+/* Mobile: bigger cards, more overlap — allow edge cards to half-clip */
+@media (max-width: 480px) {
+  .ask-fan-card {
+    --fan-card-w: clamp(88px, 25vw, 104px);
+    margin-right: calc(var(--fan-card-w) * -0.44);
+  }
 }
 
 /* Very narrow screens */

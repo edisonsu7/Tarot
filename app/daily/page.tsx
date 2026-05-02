@@ -1,5 +1,5 @@
 import { Suspense } from "react";
-import { SimpleDailyPick } from "@/components/SimpleDailyPick";
+import { DailyDrawPick } from "@/components/DailyDrawPick";
 
 export const metadata = {
   title: "今日指引",
@@ -8,10 +8,8 @@ export const metadata = {
 
 export default function DailyPage() {
   return (
-    <div className="home-cream-root mx-auto w-full px-1 sm:px-2">
-      <Suspense>
-        <SimpleDailyPick />
-      </Suspense>
-    </div>
+    <Suspense>
+      <DailyDrawPick />
+    </Suspense>
   );
 }

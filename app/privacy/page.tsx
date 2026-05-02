@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { bodyTextStyle, PageShell, sectionHeadingStyle } from "@/components/homeLayout";
 
 export const metadata = {

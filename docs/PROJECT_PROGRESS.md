@@ -75,42 +75,40 @@
 | Phase 2.5 | 抽牌页卡牌尺寸 + 翻牌动画（5 阶段状态机 + 3D flip + 覆盖层） | ✅ 完成 |
 | Phase 2.6 | 抽牌界面牌尺寸放大；灵感问牌问题输入影响结果（标题/说明文字区分） | ✅ 完成 |
 | Phase 2.8 | 接入 OpenAI API，灵感问牌有问题时生成针对性解读 | ✅ 完成 |
-| Phase 2.9 | 每日一抽文案去重复；导航栏圆角修复；移动端回归 | 🔄 进行中 |
+| Phase 2.9 | 每日一抽文案去重复；导航栏圆角修复；移动端回归 | ✅ 完成 |
+| Phase 2.9.6 | 分享卡片功能：替换复制按钮，新增 html-to-image 生成图片，v2 按钮层级 | ✅ 完成 |
+| Phase 2.9.7 | 统一结果页底部操作：仅保留分享为主按钮，其余改为文字链接 | ✅ 完成 |
+| Phase 2.9.8 | 抽取 `ResultActions` 共用组件，每日抽牌与灵感问牌结果页底部操作完全共享 | ✅ 完成 |
+| Phase 2.9.9 | 修复结果页底部间距：去除多层 margin 叠加，分享按钮宽度收窄 | ✅ 完成 |
+| Phase 2.9.10 | 创建 `SiteFooter` 组件，统一全站底部 | ✅ 完成 |
+| Phase 2.9.11 | 创建 Client `AppShell`，用 `usePathname` 控制 footer 显示，修复 footer 出现在页面中间 | ✅ 完成 |
+| Phase 2.9.12 | 每日一抽页替换为 7 张牌扇形抽牌（`DailyDrawPick`），与灵感问牌一致 | ✅ 完成 |
+| Phase 2.9.13 | 修复分享按钮宽度不一致：`align-self: center` + `display: flex` + `width: 200px` 固定 | ✅ 完成 |
 
 ---
 
-## Phase 2.9 当前状态
+## 关键组件说明
 
-### 已完成
-- [x] 每日一抽 `suitableText()` / `notSuitableText()` 改成自然句，不再重复标题
-- [x] TopNav `backdrop-blur` 从全宽 shell 移到 `.topnav-bar`，修复四角颜色异常
-
-### 待回归确认
-- [ ] 移动端（375px）：抽牌页 7 张牌不溢出，结果页 card 宽度统一
-- [ ] 灵感问牌：有问题调 API，无问题不调，API 失败 fallback
-- [ ] 导航栏圆角：多页面刷新 + hover 后角落正常
+| 组件 | 作用 |
+|------|------|
+| `components/AppShell.tsx` | 全站 shell，Client 组件，usePathname 控制 SiteFooter 显示（抽牌页不显示） |
+| `components/SiteFooter.tsx` | 统一底部：隐私与数据 · © 2026 牌语 Tarot |
+| `components/ResultActions.tsx` | 结果页底部操作区（分享按钮 + 了解这张牌/再试/返回首页 文字链接），两个结果页共用 |
+| `components/ShareCard.tsx` | 600×800 离屏卡片 DOM，用于 html-to-image 截图 |
+| `components/ShareCardButton.tsx` | 生成 PNG → navigator.share → 下载 → 剪贴板文字 fallback |
+| `components/DailyDrawPick.tsx` | 每日一抽 7 张牌扇形抽牌，与 AskDrawPick 使用相同 CSS |
 
 ---
 
 ## 已知问题 / 待观察
 
-1. **导航栏圆角**：已修复（backdrop-blur 移位），仍需多设备观察
-2. **移动端布局**：Phase 2.9 未做完整回归，明天需要测试
-3. **每日一抽无 API**：继续使用本地固定模板，未来可考虑接入（非当前优先级）
+1. **分享卡片**：`html-to-image` 在 iOS Safari 可能有跨域图片限制，需真机验证
+2. **每日一抽无 API**：继续使用本地固定模板，未来可考虑接入（非当前优先级）
 
 ---
 
-## 明天继续
+## 下一步方向（Phase 3 待定）
 
-**入口**：Phase 2.9 剩余项
+可选方向：SEO 优化 / 牌库页面 / 历史记录 / 更多牌阵
 
-优先顺序：
-1. 移动端布局回归（抽牌页 + 两个结果页）
-2. 确认灵感问牌 API 在各 case 下正常
-3. 导航栏多设备确认
-4. 如果全部通过 → 宣布 Phase 2.9 完成
-5. 下一个方向：Phase 3（待定，可以是 SEO / 分享 / 牌库页 / 历史记录）
-
----
-
-*最后更新：Phase 2.9 进行中*
+*最后更新：Phase 2.9.13 完成*

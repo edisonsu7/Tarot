@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import { cardMeaningPagePath } from "@/lib/cardMeaningDetail";
@@ -16,6 +15,7 @@ import cards from "@/data/cards.json";
 import type { TarotCard } from "@/lib/dailyDrawHelpers";
 import type { AskResult } from "@/components/AskDrawPick";
 import type { ApiReading } from "@/app/api/reading/route";
+import { ResultActions } from "@/components/ResultActions";
 
 const ASK_RESULT_KEY = "tarot_ask_result";
 const NO_QUESTION = "无具体问题";
@@ -33,7 +33,6 @@ export function AskResultView() {
   const [card, setCard] = useState<TarotCard | null>(null);
   const [result, setResult] = useState<AskResult | null>(null);
   const [apiState, setApiState] = useState<ApiState>(null);
-  const [copied, setCopied] = useState(false);
 
   // Step 1: read localStorage
   useEffect(() => {
@@ -126,25 +125,21 @@ export function AskResultView() {
   const avoidList = avoidItems(card, isReversed, q);
   const summary = oneLineSummary(card, isReversed, q);
 
-  async function handleCopy() {
-    if (!card || !result) return;
-    try {
-      const lines: string[] = [];
-      if (hasQuestion) lines.push(`问题：${rawQuestion}`, ``);
-      lines.push(`${card.nameCn}（${posLabel}） / ${card.nameEn}`);
-      lines.push(`关键词：${keywords.join("、") || "-"}`);
-      lines.push(``);
-      if (apiData) {
-        lines.push(apiData.mainReading, ``, `一句话回应：${apiData.oneSentence}`);
-      } else {
-        lines.push(`牌义：${meaning || "-"}`, ``);
-        lines.push(hasQuestion ? `针对这个问题的提醒：${remind}` : `提醒：${remind}`);
-        lines.push(hasQuestion ? `一句话回应：${summary}` : `一句话总结：${summary}`);
-      }
-      await navigator.clipboard.writeText(lines.join("\n").trim());
-      setCopied(true);
-      window.setTimeout(() => setCopied(false), 1200);
-    } catch {}
+  function buildCopyText() {
+    if (!card || !result) return "";
+    const lines: string[] = [];
+    if (hasQuestion) lines.push(`问题：${rawQuestion}`, ``);
+    lines.push(`${card.nameCn}（${posLabel}） / ${card.nameEn}`);
+    lines.push(`关键词：${keywords.join("、") || "-"}`);
+    lines.push(``);
+    if (apiData) {
+      lines.push(apiData.mainReading, ``, `一句话回应：${apiData.oneSentence}`);
+    } else {
+      lines.push(`牌义：${meaning || "-"}`, ``);
+      lines.push(hasQuestion ? `针对这个问题的提醒：${remind}` : `提醒：${remind}`);
+      lines.push(hasQuestion ? `一句话回应：${summary}` : `一句话总结：${summary}`);
+    }
+    return lines.join("\n").trim();
   }
 
   function handleAskAgain() {
@@ -289,42 +284,15 @@ export function AskResultView() {
       )}
 
       {/* 操作区 */}
-      <div className="daily-rv2-actions" style={{ flexWrap: "wrap", gap: 10, paddingBottom: 4 }}>
-        <button
-          type="button"
-          onClick={() => void handleCopy()}
-          disabled={isLoadingApi}
-          className="btn-tarot-secondary"
-          style={{ padding: "8px 16px", fontSize: 13 }}
-        >
-          {copied ? "已复制" : "复制"}
-        </button>
-        <Link
-          href={cardMeaningPagePath(card.id, isReversed, { from: pathname })}
-          className="btn-tarot-secondary"
-          style={{
-            padding: "8px 16px",
-            fontSize: 13,
-            textDecoration: "none",
-            display: "inline-flex",
-            alignItems: "center",
-          }}
-        >
-          了解这张牌
-        </Link>
-        <div style={{ flex: 1 }} />
-        <button
-          type="button"
-          onClick={handleAskAgain}
-          className="daily-rv2-more"
-          style={{ background: "none", border: "none", cursor: "pointer", padding: 0 }}
-        >
-          再问一次 →
-        </button>
-        <Link href="/" className="daily-rv2-more">
-          返回首页 →
-        </Link>
-      </div>
+      <ResultActions
+        shareLabel={isLoadingApi ? "解读中…" : "分享问牌结果"}
+        shareCardData={{ card, isReversed, mode: "ask", question: hasQuestion ? rawQuestion : undefined, oneSentence: apiData ? apiData.oneSentence : summary }}
+        shareFallbackText={buildCopyText()}
+        shareDisabled={isLoadingApi}
+        detailHref={cardMeaningPagePath(card.id, isReversed, { from: pathname })}
+        retryLabel="再问一次"
+        onRetry={handleAskAgain}
+      />
     </div>
   );
 }

@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { getDateKeyInTimeZone } from "@/lib/dateKey";
@@ -15,12 +14,12 @@ import {
   withCardFallback,
 } from "@/lib/dailyDrawHelpers";
 import { getDrawForDate, getOrCreateUserId } from "@/lib/drawStorage";
+import { ResultActions } from "@/components/ResultActions";
 
 export function DailyResultView() {
   const router = useRouter();
   const pathname = usePathname() ?? "";
   const dateKey = useMemo(() => getDateKeyInTimeZone(new Date(), "Asia/Shanghai"), []);
-  const [copied, setCopied] = useState(false);
   const [ready, setReady] = useState(false);
   const [card, setCard] = useState<ReturnType<typeof getCardById>>(null);
   const [isReversed, setIsReversed] = useState(false);
@@ -42,21 +41,16 @@ export function DailyResultView() {
 
   const posLabel = isReversed ? "逆位" : "正位";
 
-  async function handleCopy() {
-    if (!card) return;
-    try {
-      const lines: string[] = [
-        `${formatTitle(card, isReversed)} / ${card.nameEn}`,
-        `关键词：${(card.keywords ?? []).slice(0, 5).join("、") || "-"}`,
-        `今日提醒：${oneLineConclusion(card, isReversed)}`,
-        `适合：${suitableText(card)}`,
-        `不适合：${notSuitableText(card, isReversed)}`,
-        `${isReversed ? "逆位" : "正位"}牌义：${getMeaning(card, isReversed) || "-"}`,
-      ];
-      await navigator.clipboard.writeText(lines.join("\n").trim());
-      setCopied(true);
-      window.setTimeout(() => setCopied(false), 1200);
-    } catch {}
+  function buildCopyText() {
+    if (!card) return "";
+    return [
+      `${formatTitle(card, isReversed)} / ${card.nameEn}`,
+      `关键词：${(card.keywords ?? []).slice(0, 5).join("、") || "-"}`,
+      `今日提醒：${oneLineConclusion(card, isReversed)}`,
+      `适合：${suitableText(card)}`,
+      `不适合：${notSuitableText(card, isReversed)}`,
+      `${posLabel}牌义：${getMeaning(card, isReversed) || "-"}`,
+    ].join("\n").trim();
   }
 
   return (
@@ -108,22 +102,14 @@ export function DailyResultView() {
       </div>
 
       {/* 操作区 */}
-      <div className="daily-rv2-actions" style={{ paddingBottom: 4 }}>
-        <button
-          type="button"
-          onClick={handleCopy}
-          className="btn-tarot-secondary"
-          style={{ padding: "8px 16px", fontSize: 13 }}
-        >
-          {copied ? "已复制" : "复制"}
-        </button>
-        <Link
-          href={cardMeaningPagePath(card.id, isReversed, { from: pathname })}
-          className="daily-rv2-more"
-        >
-          了解这张牌 →
-        </Link>
-      </div>
+      <ResultActions
+        shareLabel="分享今日牌卡"
+        shareCardData={{ card, isReversed, mode: "daily", oneSentence: oneLineConclusion(card, isReversed) }}
+        shareFallbackText={buildCopyText()}
+        detailHref={cardMeaningPagePath(card.id, isReversed, { from: pathname })}
+        retryLabel="再抽一次"
+        retryHref="/daily"
+      />
     </div>
   );
 }

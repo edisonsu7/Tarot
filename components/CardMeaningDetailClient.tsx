@@ -87,7 +87,7 @@ export function CardMeaningDetailClient({
       window.localStorage.removeItem("tarot:drawDraft");
       sessionStorage.removeItem("tarot:lastPickPayload");
     } catch {}
-    router.push("/draw");
+    router.push("/ask");
   }
 
   return (
@@ -147,20 +147,18 @@ export function CardMeaningDetailClient({
           </section>
         ))}
 
-        <div className="cream-inner-card cream-inner-card--row" style={{ justifyContent: "center" }}>
-          <Link
-            href={backHref}
-            className="btn-tarot-secondary"
-            style={{ padding: "9px 16px", fontSize: 14, fontWeight: 700, textDecoration: "none", display: "inline-flex", alignItems: "center" }}
-          >
+        <div className="result-actions-v2">
+          <Link href={backHref} className="result-secondary-btn">
             ← {backLabel}
           </Link>
-          <button type="button" onClick={redraw} className="btn-tarot-secondary" style={{ padding: "9px 16px", fontSize: 14, fontWeight: 700 }}>
-            重新问牌
-          </button>
-          <button type="button" onClick={() => void copyResult()} className="btn-tarot-secondary" style={{ padding: "9px 16px", fontSize: 14, fontWeight: 700 }}>
-            {copied ? "已复制" : "复制结果"}
-          </button>
+          <div className="result-actions-links">
+            <button type="button" onClick={redraw} className="result-text-link">
+              重新问牌
+            </button>
+            <button type="button" onClick={() => void copyResult()} className="result-text-link">
+              {copied ? "已复制" : "复制牌义"}
+            </button>
+          </div>
         </div>
       </div>
     </PageShell>
